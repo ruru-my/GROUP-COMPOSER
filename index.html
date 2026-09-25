@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Compose heterogeneous student groups across disciplines and backgrounds. 専攻や背景の異なる学生で、多様なグループを編成します。">
+<meta property="og:title" content="Group Composer">
+<meta property="og:description" content="Compose heterogeneous student groups across disciplines and backgrounds. 専攻や背景の異なる学生で、多様なグループを編成します。">
+<meta name="theme-color" content="#B3FFE0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Group Composer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300..700&display=swap">
+<style>
+:root{
+  --bg:#B3FFE0; --surface:#FFFFFF;
+  --black:#1E3C4C; --text-2:#3F5D66; --muted:#5F7B77;
+  --line:#7FCFB0; --line-strong:#1E3C4C; --silver:#C9CED2; --graphite:#1E3C4C;
+  --hover:rgba(30,60,76,.07);
+  --blue:#6CB2FF; --blue-hover:#559FEF; --on-blue:#1E3C4C; --blue-light:#C6E1FF; --blue-pale:#FFFFFF; --blue-dark:#2F7FD8;
+  --orange:#F0561D; --orange-light:#F29D7A;
+  --d1:#6F8CFF; --d2:#F29A55; --d3:#C3C9CC; --d4:#B9A7F2; --d5:#3E7A5A; --d6:#FFFFFF;
+  --ease:cubic-bezier(0.2,0.8,0.2,1);
+  --font:"Noto Sans JP","Noto Sans Japanese",游ゴシック体,"Yu Gothic",YuGothic,"Hiragino Kaku Gothic Pro","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+  --w-regular:350; --w-medium:500; --w-bold:600;
+  --track:.046em; --track-caps:.1em;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--black);font-family:var(--font);font-size:14px;line-height:1.5;font-weight:var(--w-regular);letter-spacing:var(--track);font-feature-settings:"palt";-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:0}
+button:disabled{opacity:.35;cursor:default}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1440px;margin:0 auto;padding-inline:56px;padding-block:20px 56px}
+#app{min-height:calc(100vh - 80px)}
+.num{font-variant-numeric:tabular-nums}
+.confirm{display:flex;flex-direction:column;gap:10px;padding:14px;background:var(--surface)}
+.btn-danger{border-color:var(--orange);color:var(--black);background:var(--orange-light)}
+.btn-danger:hover:not(:disabled){background:var(--orange);color:var(--surface)}
+.ja{margin-left:.75em;font-size:.88em;letter-spacing:.04em;text-transform:none;font-weight:inherit;white-space:nowrap}
+.foot .ja{display:block;margin:4px 0 0;white-space:normal}
+.prose.jp{margin-top:-4px}
+.facts dt .ja,.g-stats dt .ja{display:block;margin-left:0;margin-top:1px;font-size:10px;color:var(--muted)}
+.btn .ja,.btn-primary .ja{margin-left:.9em}
+.foot{padding-block:0 40px;display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font-size:11px;letter-spacing:var(--track-caps);color:var(--text-2)}
+.foot span:first-child{padding-top:0}
+
+/* header */
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:16px 32px;flex-wrap:wrap}
+.wordmark{font-size:30px;font-weight:700;letter-spacing:.1em;margin:0;line-height:1.1}
+.top-tools{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.sessions{display:flex;align-items:center;gap:14px}
+.sessions .label{margin-right:4px}
+.sess{font-size:12px;letter-spacing:var(--track-caps);color:var(--muted);padding:4px 0;border-bottom:1px solid transparent;transition:color 120ms var(--ease)}
+.sess:hover{color:var(--black)}
+.sess[aria-current="true"]{color:var(--black);border-bottom-color:var(--black)}
+.history{display:flex;gap:16px}
+.stage-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;margin-top:18px;padding-bottom:0}
+.stages{display:flex;gap:12px 44px;flex-wrap:wrap}
+.stage{font-size:12px;letter-spacing:var(--track-caps);color:var(--muted);transition:color 120ms var(--ease)}
+.stage .n{margin-right:10px}
+.stage:hover{color:var(--graphite)}
+.stage[aria-current="page"]{color:var(--black)}
+.count{font-size:12px;letter-spacing:var(--track-caps);display:flex;gap:14px;align-items:center}
+
+/* type */
+.label{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--text-2)}
+.h2{font-size:22px;font-weight:700;letter-spacing:.08em;margin:0;line-height:1.2}
+.meta{font-size:11.5px;color:var(--text-2)}
+.prose{font-size:13px;color:var(--text-2);max-width:34em;margin:0}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 18px;border:1px solid var(--graphite);border-radius:1px;font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;transition:background 120ms var(--ease);white-space:nowrap}
+.btn:hover:not(:disabled){background:var(--hover)}
+.btn:active:not(:disabled){background:var(--blue-pale)}
+.btn[aria-expanded="true"]{background:var(--black);color:var(--surface);border-color:var(--black)}
+.btn.full{width:100%}
+.btn-primary{position:relative;overflow:hidden;display:flex;color:var(--on-blue);align-items:center;justify-content:center;width:100%;height:44px;background:var(--blue);border-radius:1px;font-size:12.5px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
+.btn-primary:hover:not(:disabled){background:var(--blue-hover)}
+.btn-primary:active:not(:disabled){background:var(--black)}
+.btn-primary .sweep{position:absolute;left:0;bottom:14px;height:1px;width:38%;background:var(--on-blue);transform:translateX(-100%);opacity:0}
+.btn-primary.busy .sweep{opacity:1;animation:sweep 540ms var(--ease) 1 forwards}
+@keyframes sweep{to{transform:translateX(265%)}}
+.t-btn{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--text-2);padding:4px 0;transition:color 120ms var(--ease)}
+.t-btn:hover:not(:disabled){color:var(--black)}
+.t-btn.strong{color:var(--black)}
+.stack{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* inputs */
+.input{height:40px;border:1px solid var(--line);background:transparent;border-radius:0;padding:0 10px;min-width:0;transition:border-color 120ms var(--ease)}
+.input:focus{outline:none;border-color:var(--black)}
+select.input{padding-right:6px}
+textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-size:12.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+
+/* tags + dots */
+.tag{display:inline-block;font-size:10px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);padding:2px 6px;border:1px solid currentColor;border-radius:1px;line-height:1.3;white-space:nowrap}
+.tag.solid{background:var(--graphite);border-color:var(--graphite);color:var(--surface)}
+.tag.sample{color:var(--graphite)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--orange);vertical-align:1px;flex:none}
+.tip{position:relative;display:inline-flex;align-items:center;gap:6px;cursor:help}
+.tip::after{content:attr(data-tip);white-space:pre-line!important;position:absolute;right:-4px;bottom:calc(100% + 8px);width:max-content;max-width:230px;background:var(--black);color:var(--surface);font-size:11px;line-height:1.45;letter-spacing:var(--track);text-transform:none;font-weight:var(--w-regular);padding:7px 9px;border-radius:1px;opacity:0;pointer-events:none;transition:opacity 120ms var(--ease);z-index:30;text-align:left;white-space:normal}
+.tip:hover::after,.tip:focus-visible::after{opacity:1}
+.sw{display:inline-block;width:8px;height:8px;border-radius:1px;flex:none;box-shadow:inset 0 0 0 1px rgba(30,60,76,.3)}
+
+/* page grid */
+.page{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;margin-top:28px}
+.ctrl{grid-column:1 / span 3;display:flex;flex-direction:column;gap:24px;min-width:0}
+.work{grid-column:4 / -1;padding-left:40px;min-width:0}
+.block{display:flex;flex-direction:column;gap:8px}
+
+/* students table */
+.tbl-wrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--text-2);text-align:left;padding:0 16px 8px 0;white-space:nowrap}
+.tbl td{padding:6px 16px 6px 0;vertical-align:middle;white-space:nowrap}
+.tbl tbody tr{transition:background 120ms var(--ease)}
+.tbl tbody tr.r:hover{background:var(--surface);cursor:text}
+.tbl td.no{color:var(--muted);font-size:11px;width:40px}
+.tbl td.nm{font-weight:var(--w-medium);font-size:15px}
+.tbl td.dim{color:var(--text-2)}
+.tbl td.act{text-align:right;width:1%}
+.row-act{display:inline-flex;gap:18px;opacity:0;transition:opacity 120ms var(--ease)}
+.tbl tr:hover .row-act,.tbl tr:focus-within .row-act{opacity:1}
+@media (hover:none){.row-act{opacity:1}}
+.tbl tr.editing td{padding:8px 8px 8px 0;background:var(--surface)}
+.tbl tr.editing .input{width:100%;min-width:70px}
+.caps{text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+.disc-cell{display:inline-flex;align-items:center;gap:8px}
+.add-row{padding-top:18px}
+
+/* empty */
+.empty{padding-block:12vh 10vh;display:flex;flex-direction:column;gap:40px;max-width:640px}
+.empty p{font-size:26px;line-height:1.35;letter-spacing:.04em;line-height:1.6;margin:0;font-weight:var(--w-regular)}
+
+/* paste */
+.paste{display:flex;flex-direction:column;gap:18px}
+.detect{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:11px;letter-spacing:.06em}
+.detect b{font-weight:var(--w-medium)}
+.preview-tbl td,.preview-tbl th{font-size:12px}
+
+/* composition */
+.stepper{display:flex;align-items:stretch;height:48px;width:max-content}
+.stepper button{width:48px;border:1px solid var(--line);font-size:18px;transition:background 120ms var(--ease)}
+.stepper button:hover:not(:disabled){background:var(--hover)}
+.stepper input{width:76px;border:1px solid var(--line);border-inline:0;background:transparent;text-align:center;font-size:24px;letter-spacing:.04em;border-radius:0;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.stepper input::-webkit-inner-spin-button,.stepper input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.stepper input:focus{outline:none;border-color:var(--black);border-inline:1px solid var(--black)}
+.size-line{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.size-line .stepper{height:34px}
+.size-line .stepper button{width:40px}
+.size-line .stepper input{width:60px;font-size:18px}
+.size-sum{font-size:12px;letter-spacing:var(--track-caps);line-height:1.7}
+.shape{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:4px}
+.shape span{display:flex;gap:2px}
+.shape i{width:6px;height:6px;background:var(--graphite)}
+.prio{display:flex;flex-direction:column;gap:10px}
+.prio-head{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:var(--track-caps)}
+.prio-head b{font-weight:var(--w-medium)}
+.prio-head span{color:var(--text-2);font-size:11px}
+.steps{position:relative;display:flex;justify-content:space-between;align-items:center;height:22px;margin-top:4px}
+.steps::before{content:"";position:absolute;left:12px;right:12px;top:50%;height:1px;background:var(--line-strong)}
+.steps .fill{position:absolute;left:12px;top:calc(50% - 1px);height:3px;background:var(--blue);width:calc((100% - 24px) * var(--p));transition:width 180ms var(--ease)}
+.step{position:relative;width:24px;height:24px;display:grid;place-items:center}
+.step i{width:11px;height:11px;border-radius:50%;border:1px solid var(--graphite);background:var(--bg);transition:background 120ms var(--ease),border-color 120ms var(--ease)}
+.step.on i{background:var(--blue);border-color:var(--blue-dark)}
+.step.cur i{background:var(--black);border-color:var(--black)}
+.step:hover i{border-color:var(--black)}
+.more-toggle{display:flex;justify-content:space-between;width:100%;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps)}
+.comp{margin-top:28px;display:flex;flex-direction:column;gap:40px}
+.row-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px 40px;flex-wrap:wrap;padding-bottom:0;margin-bottom:18px}
+.row-head .meta{text-align:right}
+.row-head .dock{position:static;width:min(320px,100%);padding:0;background:none;gap:8px}
+.row-head .dock .meta{text-align:left}
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 48px;align-items:start;margin-top:28px;padding-top:0}
+.btn-lg{height:44px;font-size:12.5px;letter-spacing:var(--track-caps)}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 48px;align-items:start}
+.rules{display:flex;flex-direction:column;gap:14px}
+.rule-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.toggle{height:28px;min-width:52px;padding:0 10px;border:1px solid var(--graphite);border-radius:1px;font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
+.toggle[aria-pressed="true"]{background:var(--blue-light);border-color:var(--blue-dark)}
+.pairs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.pairs li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 0;font-size:13px}
+.draft{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.draft .row{grid-column:1 / -1}
+.dock{position:sticky;bottom:calc(20px + env(safe-area-inset-bottom,0px));padding-top:12px;background:var(--bg);display:flex;flex-direction:column;gap:10px}
+.dist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 40px}
+.dist-list{list-style:none;margin:6px 0 0;padding:0}
+.dist-list li{display:grid;grid-template-columns:minmax(0,1fr) 36px 64px;align-items:center;gap:3px 10px;padding:4px 0 3px;font-size:13px}
+.dist-list .k{display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.04em;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dist-list .rn{text-align:left;cursor:text;border-bottom:1px solid transparent;transition:border-color 120ms var(--ease)}
+.dist-list .rn:hover{border-bottom-color:var(--line-strong)}
+.dist-list .rn-input{height:28px;padding:0 6px;font-size:12px;width:100%}
+.dist-list .c{text-align:right;font-size:15px}
+.dist-list .e{text-align:right;color:var(--muted);font-size:11px}
+.dist-list .bar{grid-column:1 / -1;height:3px;position:relative}
+.dist-list .bar i{position:absolute;left:0;top:0;height:3px;background:var(--graphite)}
+.dist-head{display:grid;grid-template-columns:minmax(0,1fr) 36px 64px;gap:10px;align-items:end}
+.dist-head .label:nth-child(n+2){text-align:right;white-space:nowrap}
+.hist-note{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);display:flex;gap:10px 32px;flex-wrap:wrap;font-size:12px;letter-spacing:.04em}
+
+/* groups */
+.board-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:44px;margin-top:28px}
+.side{position:sticky;top:calc(24px + env(safe-area-inset-top,0px));align-self:start;display:flex;flex-direction:column;gap:20px}
+.facts{display:grid;grid-template-columns:1fr auto;gap:5px 12px;margin:0;font-size:12px}
+.facts dt{white-space:nowrap;letter-spacing:var(--track-caps);color:var(--text-2);font-size:11px;padding-top:1px}
+.facts dd{margin:0;text-align:right;display:flex;gap:8px;justify-content:flex-end;align-items:center}
+.export-opts{display:flex;flex-direction:column;background:var(--surface)}
+.export-opts button{text-align:left;padding:10px 14px;font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
+.export-opts button:hover{background:var(--blue-pale)}
+.export-opts button[aria-pressed="true"]{background:var(--blue-pale)}
+.export-out{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.export-out textarea{width:100%;height:150px;font-size:11px}
+.board-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding-bottom:0;margin-bottom:18px}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:36px 32px}
+.group{display:flex;flex-direction:column;transition:background 180ms var(--ease),box-shadow 180ms var(--ease)}
+.group.drop{background:var(--blue-pale);box-shadow:0 0 0 10px var(--blue-pale),0 0 0 11px var(--black)}
+.g-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:6px}
+.g-num{font-size:26px;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums}
+.members{list-style:none;margin:0;padding:0 0 10px;min-height:44px;flex:1}
+.member{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 96px 38px 18px;align-items:center;column-gap:8px;padding:5px 0;cursor:grab;transition:opacity 120ms var(--ease),background 120ms var(--ease)}
+.member:hover{background:rgba(255,255,255,.45)}
+.member:active{cursor:grabbing}
+.member.dragging{opacity:.65}
+.member.swap{outline:1px solid var(--blue-dark);outline-offset:-1px;background:var(--surface)}
+.member.swap::after{content:"SWAP?";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--blue-dark);background:var(--surface);padding-left:6px}
+.member.swap .m-more{visibility:hidden}
+.m-name{display:flex;gap:6px;align-items:center;min-width:0;font-size:14px;font-weight:var(--w-medium);line-height:1.3;text-transform:uppercase;letter-spacing:.01em}
+.m-name .nm{min-width:0;overflow-wrap:anywhere}
+.m-name .tag{font-size:9px;padding:1px 4px;flex:none}
+.m-disc{display:flex;align-items:center;gap:6px;min-width:0;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-meta{font-size:11px;letter-spacing:.04em;color:var(--text-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.m-more{width:22px;height:24px;font-size:16px;line-height:1;color:var(--text-2);opacity:0;transition:opacity 120ms var(--ease)}
+.member:hover .m-more,.m-more:focus-visible,.m-more[aria-expanded="true"]{opacity:1}
+.m-more:hover{color:var(--black)}
+@media (hover:none){.m-more{opacity:1}}
+.g-stats{margin:0;padding-top:6px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:11px}
+.g-stats dt{letter-spacing:var(--track-caps);color:var(--text-2)}
+.g-stats dd{margin:0;letter-spacing:.04em;font-variant-numeric:tabular-nums;display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px}
+.g-stats .sub{flex-basis:100%;color:var(--muted);font-size:10.5px}
+.was{color:var(--muted)}
+.arr{color:var(--muted)}
+.now{color:var(--blue-dark)}
+.tray{margin-bottom:32px;padding:12px 14px;background:rgba(255,255,255,.5)}
+.tray.drop{background:var(--blue-pale)}
+.tray .members{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 32px;min-height:40px;padding-bottom:0}
+.matrix-wrap{margin-top:40px;padding-top:0;overflow-x:auto}
+.matrix{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13px;margin-top:10px}
+.matrix th,.matrix td{padding:7px 14px 7px 0;text-align:right;white-space:nowrap}
+.matrix th{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--text-2)}
+.matrix th:first-child,.matrix td:first-child{text-align:left;padding-right:32px;font-size:11px;letter-spacing:var(--track-caps)}
+.matrix tr.sec td{padding-top:20px;color:var(--text-2);font-weight:var(--w-medium);border-top:0}
+.matrix td.z{color:var(--muted)}
+.matrix td.hi{font-weight:var(--w-bold)}
+.matrix td.tot{color:var(--text-2);padding-left:18px}
+.page-note{margin-top:64px;display:flex;flex-direction:column;gap:24px;max-width:520px}
+
+/* menu */
+.menu{position:fixed;z-index:60;background:var(--surface);border:1px solid var(--line-strong);border-radius:2px;width:240px;padding:6px 0;font-size:11px;letter-spacing:var(--track-caps)}
+.menu > button,.menu .sub button{display:flex;justify-content:space-between;width:100%;padding:9px 14px;text-align:left;font-weight:var(--w-medium);transition:background 120ms var(--ease)}
+.menu button:hover{background:var(--blue-pale)}
+.menu .sub{background:var(--bg);max-height:240px;overflow:auto;margin:4px 0}
+.menu .sub button{font-weight:var(--w-regular);letter-spacing:.02em;font-size:12px;gap:10px}
+.menu .sub .g{color:var(--muted);font-variant-numeric:tabular-nums}
+.menu .grid{display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px;gap:2px}
+.menu .grid button{justify-content:center;padding:8px 0;font-size:13px;letter-spacing:0;font-variant-numeric:tabular-nums}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:1100px){
+  .wrap{padding-inline:32px}
+  .page{display:flex;flex-direction:column;gap:48px}
+  .work{padding-left:0}
+  .dock{position:static}
+  .cols3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .board-layout{grid-template-columns:minmax(0,1fr);gap:40px}
+  .side{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 40px}
+  .board{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .wrap{padding-inline:20px;padding-block:20px 72px}
+  .wordmark{font-size:24px}
+  .stages{gap:10px 22px}
+  .side{grid-template-columns:minmax(0,1fr);order:2}
+  .board{grid-template-columns:minmax(0,1fr)}
+  .cols3{grid-template-columns:minmax(0,1fr)}
+  .actions{grid-template-columns:1fr 1fr;gap:12px}
+  .actions .stack{grid-column:1 / -1;order:-1}
+  .row-head .meta{text-align:left}
+  .empty p{font-size:21px}
+}
+@media print{
+  body{background:#fff}
+  .top-row,.stage-row,.side,.matrix-wrap,.tray,.m-more,.lock-btn,.board-head .t-btn{display:none!important}
+  .board-layout{display:block;margin-top:0}
+  .board{grid-template-columns:repeat(3,1fr)}
+  .wrap{padding:0}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="app"></div>
+<footer class="wrap foot"><span>GROUP COMPOSER <button class="t-btn" data-act="clear-all" style="margin-left:16px">CLEAR ALL DATA</button></span><span>Student data stays in this browser. Nothing is uploaded.<span class="ja">学生データはこのブラウザ内にのみ保存され、アップロードされません。</span></span></footer>
+<div id="menu-layer"></div>
+<input type="file" id="csv-file" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values" hidden>
+
+<script>
+(function(){
+const W=[0,.25,.5,.75,1];
+const WL=['OFF','LOW','MEDIUM','HIGH','HIGHEST'];
+const ATTRS=[['disc','DISCIPLINE'],['nat','NATIONALITY'],['gen','GENDER']];
+const GORDER=['F','M','X'];
+const KEY='group-composer-v3';
+
+const SAMPLE=[
+ ['田中 花子','F','JP','VISUAL',''],['王 晨','M','CN','ILLUSTRATION',''],['Kim Mina','F','KR','MEDIA',''],
+ ['佐藤 蓮','M','JP','GAME',''],['陳 雨桐','F','CN','ILLUSTRATION',''],['Park Jihoon','M','KR','MEDIA',''],
+ ['林 佳穎','F','TW','VISUAL','Exchange, spring term'],['山田 さくら','F','JP','ILLUSTRATION',''],['李 浩然','M','CN','VISUAL',''],
+ ['鈴木 陽菜','F','JP','VISUAL',''],['高橋 湊','M','JP','MEDIA',''],['伊藤 美咲','F','JP','GAME',''],
+ ['渡辺 悠真','M','JP','ILLUSTRATION',''],['張 欣怡','F','CN','MEDIA',''],['小林 結衣','F','JP','VISUAL',''],
+ ['加藤 大翔','M','JP','ILLUSTRATION',''],['Lee Seoyeon','F','KR','GAME',''],['吉田 葵','F','JP','VISUAL',''],
+ ['劉 子軒','M','CN','GAME',''],['中村 凛','X','JP','MEDIA',''],['松本 芽依','F','JP','ILLUSTRATION',''],
+ ['井上 颯','M','JP','VISUAL',''],['Choi Yuna','F','KR','MEDIA',''],['木村 陽斗','M','JP','ILLUSTRATION',''],
+ ['楊 思琪','F','CN','VISUAL',''],['清水 楓','F','JP','GAME',''],['Camille Martin','F','FR','MEDIA','Exchange, spring term'],
+ ['山本 蒼','M','JP','VISUAL',''],['周 明','M','CN','ILLUSTRATION',''],['森 千尋','','JP','VISUAL','Gender left blank'],
+ ['黄 嘉欣','F','CN','GAME',''],['斎藤 陸','M','JP','ILLUSTRATION','']
+];
+
+let state, past=[], future=[], uid=0;
+const ui={page:'groups',renaming:null,editId:null,adding:false,pasteOpen:false,pasteText:'',menu:null,menuSub:null,showDist:false,exportOpen:false,exportMode:null,exportStatus:'',moreRules:true,ruleDraft:null,flash:null,composing:false};
+
+/* ---------- utils ---------- */
+const J=(en,ja)=>`${en}<span class="ja">${ja}</span>`;
+const T=(en,ja)=>en+'\n'+ja;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const pk=(a,b)=>a<b?a+'|'+b:b+'|'+a;
+const newId=()=>'s'+Date.now().toString(36)+(uid++).toString(36);
+function rngFrom(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function shuffleArr(a,r){for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const byId=()=>{const m={};state.students.forEach(s=>m[s.id]=s);return m};
+const cur=()=>state.sessions[state.current];
+function groupRange(n){const{min,max}=state.settings;const lo=Math.max(1,Math.ceil(n/max)),hi=Math.max(1,Math.floor(n/min));return{lo,hi,ok:lo<=hi}}
+function groupCount(n){const{min,max,groups}=state.settings;if(groups)return Math.max(1,Math.min(Math.max(1,n),groups));const r=groupRange(n);if(!r.ok)return r.lo;const auto=Math.round(n/((min+max)/2));return Math.min(r.hi,Math.max(r.lo,auto))}
+function groupSizes(n){const G=groupCount(n);const base=Math.floor(n/G),rem=n%G;return Array.from({length:G},(_,i)=>base+(i<rem?1:0))}
+function sizesText(sizes){
+  const c={};sizes.forEach(s=>c[s]=(c[s]||0)+1);const ks=Object.keys(c).map(Number).sort((a,b)=>a-b);
+  if(ks.length===1)return [`${sizes.length} GROUPS`,`${ks[0]} STUDENTS / GROUP`];
+  return ks.map(k=>`${c[k]} × ${k} STUDENTS`);
+}
+function discList(){const o=[];state.students.forEach(s=>{if(s.disc&&!o.includes(s.disc))o.push(s.disc)});return o}
+function discColor(d){const i=discList().indexOf(d);return i<0?'transparent':`var(--d${i%6+1})`}
+function counts(k,ids){const m=byId(),c={};(ids||state.students.map(s=>s.id)).forEach(id=>{const v=m[id]&&m[id][k];if(v)c[v]=(c[v]||0)+1});return c}
+function sortEntries(k,c){const e=Object.entries(c);if(k==='gen')return e.sort((a,b)=>{const ia=GORDER.indexOf(a[0]),ib=GORDER.indexOf(b[0]);return(ia<0?9:ia)-(ib<0?9:ib)});return e.sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))}
+
+/* ---------- persistence + history ---------- */
+function persist(){try{localStorage.setItem(KEY,JSON.stringify({state,page:ui.page}))}catch(e){}}
+function commit(fn){past.push(JSON.stringify(state));if(past.length>200)past.shift();future.length=0;fn();persist();render()}
+function undo(){if(!past.length)return;future.push(JSON.stringify(state));state=JSON.parse(past.pop());ui.menu=null;ui.editId=null;persist();render()}
+function redo(){if(!future.length)return;past.push(JSON.stringify(state));state=JSON.parse(future.pop());ui.menu=null;persist();render()}
+
+/* ---------- composer ---------- */
+function prevPairs(upto){const p=new Map();state.sessions.slice(0,upto).forEach(se=>(se.groups||[]).forEach(g=>{for(let i=0;i<g.ids.length;i++)for(let j=i+1;j<g.ids.length;j++){const k=pk(g.ids[i],g.ids[j]);if(!p.has(k))p.set(k,[]);p.get(k).push(se.id)}}));return p}
+function buildCtx(){
+  const m=byId(),sh={},w={};
+  ATTRS.forEach(([k])=>{const c=counts(k);const n=Object.values(c).reduce((a,b)=>a+b,0);sh[k]={};for(const x in c)sh[k][x]=c[x]/n;w[k]=W[state.settings.w[k]]});
+  return{m,sh,w,prev:prevPairs(state.current),apart:new Set(state.settings.apart.map(([a,b])=>pk(a,b))),together:state.settings.together,avoid:state.settings.avoidRepeat};
+}
+function gcost(ids,ctx){
+  let c=0;
+  for(const[k]of ATTRS){const w=ctx.w[k];if(!w)continue;const cnt={};let n=0;for(const id of ids){const v=ctx.m[id]&&ctx.m[id][k];if(v){cnt[v]=(cnt[v]||0)+1;n++}}for(const cat in ctx.sh[k]){const d=(cnt[cat]||0)-n*ctx.sh[k][cat];c+=w*d*d}}
+  for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++){const key=pk(ids[i],ids[j]);if(ctx.avoid){const p=ctx.prev.get(key);if(p)c+=1.5*p.length}if(ctx.apart.has(key))c+=60}
+  for(const[a,b]of ctx.together){if(ids.includes(a)!==ids.includes(b))c+=30}
+  return c;
+}
+function optimize(groups,fixed,frozen,ctx,r){
+  const cost=groups.map(g=>gcost(g,ctx));const idx=groups.map((_,i)=>i).filter(i=>!frozen.has(i));
+  for(let pass=0;pass<40;pass++){
+    let improved=false;const pairs=[];
+    for(const a of idx)for(const b of idx)if(a<b)pairs.push([a,b]);
+    shuffleArr(pairs,r);
+    for(const[a,b]of pairs){const A=groups[a],B=groups[b];
+      for(let i=0;i<A.length;i++){if(fixed.has(A[i]))continue;
+        for(let j=0;j<B.length;j++){if(fixed.has(B[j]))continue;
+          const x=A[i];A[i]=B[j];B[j]=x;
+          const ca=gcost(A,ctx),cb=gcost(B,ctx);
+          if(ca+cb<cost[a]+cost[b]-1e-9){cost[a]=ca;cost[b]=cb;improved=true}
+          else{B[j]=A[i];A[i]=x}
+        }}}
+    if(!improved)break;
+  }
+  return cost.reduce((s,x)=>s+x,0);
+}
+function composeFresh(seed,restarts){
+  const ctx=buildCtx(),ids=state.students.map(s=>s.id),sizes=groupSizes(ids.length),r=rngFrom(seed);
+  let best=null,bc=Infinity;
+  for(let t=0;t<restarts;t++){const o=shuffleArr(ids.slice(),r),gs=[];let p=0;sizes.forEach(n=>{gs.push(o.slice(p,p+n));p+=n});const c=optimize(gs,new Set(),new Set(),ctx,r);if(c<bc){bc=c;best=gs}}
+  return best.map(g=>({ids:g,locked:false}));
+}
+function shuffleUnlocked(seed){
+  const se=cur(),groups=currentGroups(),lockedS=new Set(se.lockedStudents),frozen=new Set();
+  groups.forEach((g,i)=>{if(g.locked)frozen.add(i)});
+  const gs=groups.map(g=>g.ids.slice());
+  unassigned().forEach(id=>{let bi=-1;gs.forEach((g,i)=>{if(!frozen.has(i)&&(bi<0||g.length<gs[bi].length))bi=i});if(bi>=0)gs[bi].push(id)});
+  const movable=[];gs.forEach((g,i)=>{if(!frozen.has(i))g.forEach(id=>{if(!lockedS.has(id))movable.push(id)})});
+  const ctx=buildCtx(),r=rngFrom(seed);let best=null,bc=Infinity;
+  for(let t=0;t<4;t++){const o=shuffleArr(movable.slice(),r);let p=0;const g2=gs.map((g,i)=>frozen.has(i)?g.slice():g.map(id=>lockedS.has(id)?id:o[p++]));const c=optimize(g2,lockedS,frozen,ctx,r);if(c<bc){bc=c;best=g2}}
+  return groups.map((g,i)=>({ids:best[i],locked:g.locked}));
+}
+
+/* ---------- session views ---------- */
+function currentGroups(){const se=cur();if(!se.groups)return null;const m=byId();return se.groups.map(g=>({ids:g.ids.filter(id=>m[id]),locked:g.locked}))}
+function unassigned(){const gs=currentGroups();if(!gs)return[];const s=new Set();gs.forEach(g=>g.ids.forEach(id=>s.add(id)));return state.students.filter(x=>!s.has(x.id)).map(x=>x.id)}
+function statsOf(ids){const st={};ATTRS.forEach(([k])=>st[k]=counts(k,ids));return st}
+function statText(st,k){const e=sortEntries(k,st[k]);if(k==='gen')return e.length?e.map(([c,n])=>c+' '+n).join(' / '):'—';return e.length+(e.length===1?' TYPE':' TYPES')}
+function natBreak(st){return sortEntries('nat',st.nat).map(([c,n])=>c+' '+n).join(' · ')}
+function attention(ids,st,ctx){
+  const out={};
+  ATTRS.forEach(([k])=>{if(!ctx.w[k])return;const n=Object.values(st[k]).reduce((a,b)=>a+b,0);
+    for(const[cat,c]of Object.entries(st[k])){const e=n*(ctx.sh[k][cat]||0);if(c>=2&&c>Math.ceil(e-1e-9)){
+      out[k]=k==='disc'?T(`${c} students are from the same discipline (${cat}).`,`同じ DISCIPLINE（${cat}）の学生が${c}名います。`):k==='nat'?T(`${c} of ${n} students list ${cat} as nationality.`,`NATIONALITY が ${cat} の学生が${n}名中${c}名です。`):T(`${c} of ${n} students are recorded as ${cat}.`,`GENDER が ${cat} の学生が${n}名中${c}名です。`);break}}});
+  return out;
+}
+function nameOf(id){const s=byId()[id];return s?s.name:'—'}
+function groupIssues(ids,ctx){
+  const rep=[],apart=[];
+  for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++){const k=pk(ids[i],ids[j]);const p=ctx.prev.get(k);if(ctx.avoid&&p)rep.push(T(`${nameOf(ids[i])} and ${nameOf(ids[j])} were grouped together before.`,`${nameOf(ids[i])} と ${nameOf(ids[j])} は以前も同じグループでした。`));if(ctx.apart.has(k))apart.push(T(`${nameOf(ids[i])} and ${nameOf(ids[j])} are set to be kept apart.`,`${nameOf(ids[i])} と ${nameOf(ids[j])} は離す設定です。`))}
+  return{rep,apart};
+}
+
+/* ---------- import ---------- */
+const HK=[['name',/^(name|full ?name|student|student ?name|氏名|名前|姓名|学生名|이름)$/i],['gen',/^(gender|sex|性別|성별)$/i],['nat',/^(nationality|country|nation|citizenship|国籍|국적)$/i],['disc',/^(discipline|major|department|dept|course|program|programme|field|専攻|専門|専門分野|学科|コース|領域|전공)$/i],['notes',/^(notes?|memo|comments?|備考|メモ)$/i]];
+const NAT={japan:'JP','日本':'JP',china:'CN','中国':'CN',korea:'KR','south korea':'KR','韓国':'KR',taiwan:'TW','台湾':'TW',france:'FR','フランス':'FR',usa:'US','united states':'US','アメリカ':'US',germany:'DE','ドイツ':'DE',thailand:'TH','タイ':'TH',indonesia:'ID',vietnam:'VN','ベトナム':'VN','hong kong':'HK','香港':'HK',italy:'IT',uk:'GB','united kingdom':'GB'};
+function normGender(v){const s=String(v||'').trim().toLowerCase();if(!s)return'';if(/^(f|female|woman|w|女|女性|여|여성)$/.test(s))return'F';if(/^(m|male|man|男|男性|남|남성)$/.test(s))return'M';if(/^(x|other|non-?binary|nb|その他|기타)$/.test(s))return'X';return null}
+function normNat(v){const s=String(v||'').trim();if(!s)return'';return NAT[s.toLowerCase()]||s.toUpperCase()}
+function splitLine(line,d){if(d==='\t')return line.split('\t').map(s=>s.trim());const out=[];let c='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(q){if(ch==='"'){if(line[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}else{if(ch==='"')q=true;else if(ch===d){out.push(c);c=''}else c+=ch}}out.push(c);return out.map(s=>s.trim())}
+function parseTable(text){
+  const lines=String(text||'').replace(/\r/g,'').split('\n').filter(l=>l.trim());
+  if(!lines.length)return null;
+  const d=lines.some(l=>l.includes('\t'))?'\t':lines.some(l=>l.includes(','))?',':lines.some(l=>l.includes(';'))?';':'\t';
+  let rows=lines.map(l=>splitLine(l,d));const nc=Math.max(...rows.map(r=>r.length));
+  const map=new Array(nc).fill(null);let header=false;
+  rows[0].forEach((h,i)=>{for(const[k,re]of HK)if(re.test(h.trim())&&!map.includes(k)){map[i]=k;header=true}});
+  const labels=[];
+  if(header){rows[0].forEach((h,i)=>{if(!map[i])map[i]='c:'+(h.trim()||`FIELD ${i+1}`).toUpperCase()});rows=rows.slice(1)}
+  else{
+    const col=i=>rows.map(r=>(r[i]||'').trim()).filter(Boolean);
+    const score=(i,f)=>{const v=col(i);return v.length?v.filter(f).length/v.length:0};
+    const free=()=>map.map((m,i)=>m?null:i).filter(i=>i!==null);
+    let best=-1,bs=.8;free().forEach(i=>{const s=score(i,v=>normGender(v)!==null);if(s>=bs){bs=s;best=i}});if(best>=0)map[best]='gen';
+    best=-1;bs=.8;free().forEach(i=>{const s=score(i,v=>/^[A-Za-z]{2,3}$/.test(v)||NAT[v.toLowerCase()]);if(s>=bs){bs=s;best=i}});if(best>=0)map[best]='nat';
+    const f=free();if(f.length)map[f[0]]='name';
+    const f2=free();if(f2.length){let bi=f2[0],br=2;f2.forEach(i=>{const v=col(i);const r=v.length?new Set(v).size/v.length:2;if(r<br){br=r;bi=i}});map[bi]='disc'}
+    map.forEach((m,i)=>{if(!m)map[i]='c:FIELD '+(i+1)});
+  }
+  const out=[];let skipped=0;
+  rows.forEach(r=>{const s={name:'',gen:'',nat:'',disc:'',notes:'',custom:{}};map.forEach((k,i)=>{const v=(r[i]||'').trim();if(k.startsWith('c:')){if(v)s.custom[k.slice(2)]=v}else s[k]=v});
+    const g=normGender(s.gen);s.gen=g===null?s.gen.toUpperCase().slice(0,10):g;s.nat=normNat(s.nat);s.disc=s.disc.toUpperCase();
+    if(!s.name){skipped++;return}out.push(s)});
+  const colName=i=>String.fromCharCode(65+i);
+  const names={name:'NAME',gen:'GENDER',nat:'NATIONALITY',disc:'DISCIPLINE',notes:'NOTES'};
+  map.forEach((k,i)=>labels.push([colName(i),k.startsWith('c:')?k.slice(2)+' (CUSTOM)':names[k]]));
+  return{rows:out,labels,header,skipped,custom:map.filter(k=>k.startsWith('c:')).map(k=>k.slice(2))};
+}
+function applyImport(replace){
+  const p=parseTable(ui.pasteText);if(!p||!p.rows.length)return;
+  commit(()=>{
+    const add=p.rows.map(r=>({id:newId(),...r}));
+    if(replace){state.students=add;state.sessions=[{id:'W01',groups:null,lockedStudents:[]}];state.current=0;state.settings.apart=[];state.settings.together=[];state.customFields=[];state.sample=false}
+    else state.students=state.students.concat(add);
+    p.custom.forEach(c=>{if(!state.customFields.includes(c))state.customFields.push(c)});
+  });
+  ui.pasteOpen=false;ui.pasteText='';render();
+}
+
+/* ---------- initial state ---------- */
+function sampleState(){
+  state={students:SAMPLE.map(([name,gen,nat,disc,notes],i)=>({id:'s'+pad(i+1),name,gen,nat,disc,notes,custom:{}})),customFields:[],
+    settings:{min:4,max:5,groups:null,w:{disc:3,nat:2,gen:2},avoidRepeat:true,apart:[['s02','s09']],together:[]},sessions:[],current:0,sample:true};
+  ['W01','W02','W03'].forEach((id,i)=>{state.sessions.push({id,groups:null,lockedStudents:[]});state.current=i;state.sessions[i].groups=composeFresh(101+i*17,i===2?10:4)});
+  state.sessions[2].groups[1].locked=true;
+}
+function emptyState(){state={students:[],customFields:[],settings:{min:4,max:5,groups:null,w:{disc:3,nat:2,gen:2},avoidRepeat:true,apart:[],together:[]},sessions:[{id:'W01',groups:null,lockedStudents:[]}],current:0,sample:false}}
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&saved.state&&saved.state.students){state=saved.state;ui.page=saved.page||'groups'}}catch(e){}
+if(!state)sampleState();
+state.current=state.sessions.length-1;
+
+/* ---------- render: shell ---------- */
+function render(){
+  const focusId=document.activeElement&&document.activeElement.id;
+  const app=document.getElementById('app');
+  const n=state.students.length;
+  const stages=[['students','01','STUDENTS'],['composition','02','COMPOSITION'],['groups','03','GROUPS']];
+  app.innerHTML=`
+  <header>
+    <div class="top-row">
+      <h1 class="wordmark">GROUP COMPOSER</h1>
+      <div class="top-tools">
+        <div class="history" ${ui.page==='composition'?'hidden':''}>
+          <button class="t-btn" data-act="undo" ${past.length?'':'disabled'} title="Undo (⌘Z)">UNDO</button>
+          <button class="t-btn" data-act="redo" ${future.length?'':'disabled'} title="Redo (⇧⌘Z)">REDO</button>
+        </div>
+      </div>
+    </div>
+    <div class="stage-row">
+      <nav class="stages" aria-label="Stages">
+        ${stages.map(([p,no,l])=>`<button class="stage" data-act="page" data-p="${p}" ${ui.page===p?'aria-current="page"':''}><span class="n">${no}</span>${l}</button>`).join('')}
+      </nav>
+      <div class="count num"><span>${n} STUDENTS</span></div>
+    </div>
+  </header>
+  <main>${ui.page==='students'?renderStudents():ui.page==='composition'?renderComposition():renderGroups()}</main>`;
+  renderMenu();
+  if(focusId){const el=document.getElementById(focusId);if(el&&el!==document.activeElement)el.focus()}
+  if(ui.flash){const f=ui.flash;setTimeout(()=>{if(ui.flash!==f)return;ui.flash=null;document.querySelectorAll('.was,.arr').forEach(e=>e.remove());document.querySelectorAll('.now').forEach(e=>e.classList.remove('now'))},1000)}
+}
+
+/* ---------- page 01 ---------- */
+function renderStudents(){
+  const n=state.students.length;
+  if(!n&&!ui.pasteOpen&&!ui.adding)return`
+    <section class="empty">
+      <p>Compose heterogeneous student groups<br>across disciplines and backgrounds.</p>
+      <p style="font-size:.72em;margin-top:-24px">専攻や背景の異なる学生で、多様なグループを編成します。</p>
+      <div class="stack" style="max-width:260px">
+        <button class="btn full" data-act="paste-open">PASTE STUDENTS</button>
+        <button class="btn full" data-act="csv-open">IMPORT CSV</button>
+        <button class="t-btn" data-act="load-sample" style="align-self:flex-start;margin-top:8px">LOAD SAMPLE CLASS</button>
+      </div>
+    </section>`;
+  const dl=discList();
+  return`
+  <div class="page">
+    <aside class="ctrl">
+      <div class="block">
+        <h2 class="h2">${J('STUDENTS','学生名簿')}</h2>
+        <div class="meta num">${n} STUDENTS · ${dl.length} DISCIPLINES</div>
+      </div>
+      <div class="stack">
+        <button class="btn full" data-act="paste-open" ${ui.pasteOpen?'aria-expanded="true"':''}>PASTE FROM SPREADSHEET</button>
+        <button class="btn full" data-act="csv-open">IMPORT CSV</button>
+      </div>
+      ${ui.confirmClear?`<div class="confirm">
+        <p class="prose" style="color:var(--black)">Delete all ${n} students and every group from this browser? This cannot be undone.</p>
+        <p class="prose jp" style="color:var(--black)">このブラウザから学生${n}名とすべてのグループを削除します。元に戻せません。</p>
+        <div class="row"><button class="btn btn-danger" id="clear-confirm" data-act="clear-confirm">DELETE ALL</button><button class="t-btn" data-act="clear-cancel" style="margin-left:8px">CANCEL</button></div>
+      </div>`:`<button class="t-btn" data-act="clear-all" style="align-self:flex-start">CLEAR ALL DATA</button>`}
+    </aside>
+    <section class="work">${ui.pasteOpen?renderPaste():renderTable()}</section>
+  </div>`;
+}
+function renderTable(){
+  const cf=state.customFields;
+  const rows=state.students.map((s,i)=>ui.editId===s.id?editRow(s,i):`
+    <tr class="r" data-act="edit" data-id="${s.id}">
+      <td class="no num">${pad(i+1)}</td>
+      <td class="nm">${esc(s.name)}</td>
+      <td class="caps">${esc(s.gen)||'<span class="meta">—</span>'}</td>
+      <td class="caps">${esc(s.nat)||'<span class="meta">—</span>'}</td>
+      <td class="caps">${s.disc?`<span class="disc-cell"><i class="sw" style="background:${discColor(s.disc)}"></i>${esc(s.disc)}</span>`:`<span class="tip" tabindex="0" data-tip="${T('Discipline is required for composing.','編成には DISCIPLINE の入力が必要です。')}"><span class="dot"></span><span class="meta">MISSING</span></span>`}</td>
+      <td class="dim">${esc(s.notes)}</td>
+      ${cf.map(c=>`<td class="dim">${esc(s.custom&&s.custom[c])}</td>`).join('')}
+      <td class="act"><span class="row-act"><button class="t-btn" data-act="edit" data-id="${s.id}">EDIT</button><button class="t-btn" data-act="remove" data-id="${s.id}">REMOVE</button></span></td>
+    </tr>`).join('');
+  return`
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>NO.</th><th>NAME</th><th>GENDER</th><th>NATIONALITY</th><th>DISCIPLINE</th><th>NOTES</th>${cf.map(c=>`<th>${esc(c)}</th>`).join('')}<th></th></tr></thead>
+      <tbody>${rows}${ui.adding?editRow({id:'__new',name:'',gen:'',nat:'',disc:'',notes:'',custom:{}},state.students.length):''}</tbody>
+    </table>
+  </div>
+  <div class="add-row">${ui.adding?'':'<button class="t-btn strong" data-act="add-student">+ ADD STUDENT</button>'}</div>
+  <datalist id="disc-list">${discList().map(d=>`<option value="${esc(d)}">`).join('')}</datalist>
+  <datalist id="nat-list">${sortEntries('nat',counts('nat')).map(([d])=>`<option value="${esc(d)}">`).join('')}</datalist>`;
+}
+function editRow(s,i){
+  const cf=state.customFields;
+  const g=['','F','M','X'];if(s.gen&&!g.includes(s.gen))g.push(s.gen);
+  return`<tr class="editing" data-edit="${s.id}">
+    <td class="no num">${pad(i+1)}</td>
+    <td><input class="input" id="e-name" value="${esc(s.name)}" placeholder="Name / 氏名" aria-label="Name"></td>
+    <td><select class="input" id="e-gen" aria-label="Gender">${g.map(v=>`<option value="${v}" ${v===s.gen?'selected':''}>${v===''?'— (exclude / 除外)':v==='X'?'X (other / その他)':v}</option>`).join('')}</select></td>
+    <td><input class="input caps" id="e-nat" value="${esc(s.nat)}" placeholder="JP / 日本 / …" list="nat-list" aria-label="Nationality" style="width:120px;min-width:120px"></td>
+    <td><input class="input caps" id="e-disc" value="${esc(s.disc)}" placeholder="VISUAL" list="disc-list" aria-label="Discipline"></td>
+    <td><input class="input" id="e-notes" value="${esc(s.notes)}" placeholder="Notes / 備考" aria-label="Notes"></td>
+    ${cf.map((c,j)=>`<td><input class="input" id="e-c${j}" value="${esc(s.custom&&s.custom[c])}" aria-label="${esc(c)}"></td>`).join('')}
+    <td class="act"><span class="row-act" style="opacity:1"><button class="t-btn strong" data-act="save-edit">SAVE</button><button class="t-btn" data-act="cancel-edit">CANCEL</button></span></td>
+  </tr>`;
+}
+function renderPaste(){
+  return`
+  <div class="paste">
+    <div class="block">
+      <div class="label">${J('PASTE FROM SPREADSHEET','表から貼り付け')}</div>
+      <p class="prose">Copy the rows from Excel, Google Sheets or Numbers and paste them here. A header row helps; columns such as Name, Gender, Nationality and Discipline (or 氏名, 性別, 国籍, 専攻) are recognised. Other columns are kept as custom fields.</p>
+      <p class="prose jp">Excel・Google スプレッドシート・Numbers から行をコピーして貼り付けてください。見出し行があると確実です。Name・GENDER・NATIONALITY・DISCIPLINE（または 氏名・性別・国籍・専攻）を認識します。その他の列はカスタム項目として残ります。</p>
+    </div>
+    <textarea class="input" id="paste-ta" rows="10" placeholder="Name&#9;Gender&#9;Nationality&#9;Discipline&#10;田中 花子&#9;F&#9;JP&#9;Visual">${esc(ui.pasteText)}</textarea>
+    <div id="paste-preview">${pastePreview()}</div>
+  </div>`;
+}
+function pastePreview(){
+  const p=parseTable(ui.pasteText);
+  const btns=ok=>`<div class="row"><button class="btn" data-act="paste-replace" ${ok?'':'disabled'}>REPLACE LIST</button><button class="btn" data-act="paste-append" ${ok?'':'disabled'}>ADD TO LIST</button><button class="t-btn" data-act="paste-cancel" style="margin-left:8px">CANCEL</button></div>`;
+  if(!p)return btns(false);
+  const miss=p.rows.filter(r=>!r.disc).length;
+  return`<div class="stack" style="gap:16px">
+    <div class="detect">${p.labels.map(([c,l])=>`<span><span class="meta">${c}</span> → <b>${esc(l)}</b></span>`).join('')}</div>
+    <div class="meta num">${p.rows.length} STUDENTS DETECTED${p.header?' · HEADER ROW USED':' · NO HEADER, COLUMNS GUESSED FROM VALUES'}${p.skipped?` · ${p.skipped} ROWS WITHOUT A NAME SKIPPED`:''}${miss?` · <span class="dot"></span> ${miss} WITHOUT DISCIPLINE`:''}</div>
+    ${p.rows.length?`<div class="tbl-wrap"><table class="tbl preview-tbl"><thead><tr><th>NAME</th><th>GENDER</th><th>NATIONALITY</th><th>DISCIPLINE</th></tr></thead><tbody>${p.rows.slice(0,5).map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.gen)||'—'}</td><td>${esc(r.nat)||'—'}</td><td>${esc(r.disc)||'—'}</td></tr>`).join('')}</tbody></table>${p.rows.length>5?`<div class="meta" style="padding-top:8px">+ ${p.rows.length-5} MORE</div>`:''}</div>`:''}
+    ${btns(p.rows.length>0)}</div>`;
+}
+
+/* ---------- page 02 ---------- */
+function renderComposition(){
+  const n=state.students.length,set=state.settings;
+  const sizes=groupSizes(n),st=sizesText(sizes),rg=groupRange(n);
+  const se=cur();
+  const prio=ATTRS.map(([k,l])=>{const v=set.w[k];return`
+    <div>
+      <div class="prio-head"><b>${l}</b><span>${WL[v]}</span></div>
+      <div class="steps" role="radiogroup" aria-label="${l} priority" data-k="${k}" style="--p:${v/4}">
+        <span class="fill"></span>
+        ${W.map((_,i)=>`<button class="step ${i<=v?'on':''} ${i===v?'cur':''}" id="step-${k}-${i}" role="radio" aria-checked="${i===v}" aria-label="${WL[i]}" tabindex="${i===v?0:-1}" data-act="weight" data-k="${k}" data-i="${i}"><i></i></button>`).join('')}
+      </div>
+    </div>`}).join('');
+  const pairList=type=>{const L=set[type];return`
+    <ul class="pairs">${L.map(([a,b],i)=>`<li><span>${esc(nameOf(a))} <span class="meta">/</span> ${esc(nameOf(b))}</span><button class="t-btn" data-act="rule-remove" data-t="${type}" data-i="${i}">REMOVE</button></li>`).join('')}</ul>
+    ${ui.ruleDraft===type?`<div class="draft">
+      ${['a','b'].map(x=>`<select class="input" id="rd-${x}" aria-label="Student ${x.toUpperCase()}">${state.students.map((s,i)=>`<option value="${s.id}" ${i===(x==='a'?0:1)?'selected':''}>${esc(s.name)}</option>`).join('')}</select>`).join('')}
+      <div class="row"><button class="btn" data-act="rule-save" data-t="${type}">ADD PAIR</button><button class="t-btn" data-act="rule-cancel">CANCEL</button></div></div>`
+    :`<button class="t-btn strong" data-act="rule-add" data-t="${type}" style="align-self:flex-start" ${n<2?'disabled':''}>+ ADD</button>`}`};
+  const prevCount=prevPairs(state.current).size;
+  const dist=ATTRS.map(([k,l])=>{const c=counts(k);const e=sortEntries(k,c);const tot=e.reduce((a,[,v])=>a+v,0);const max=Math.max(1,...e.map(([,v])=>v));const blank=n-tot;return`
+    <div>
+      <div class="dist-head"><span class="label" style="color:var(--black)">${l}</span><span class="label">N</span><span class="label">/ GROUP</span></div>
+      <ul class="dist-list">
+        ${e.map(([cat,v])=>`<li>${k!=='gen'&&ui.renaming&&ui.renaming.k===k&&ui.renaming.cat===cat?`<input class="input caps rn-input" id="rn-input" value="${esc(cat)}" aria-label="Rename ${esc(cat)}">`:`<${k==='gen'?'span':'button'} class="k ${k==='gen'?'':'rn'}" ${k==='gen'?'':`data-act="rename" data-k="${k}" data-cat="${esc(cat)}" title="Rename for every student"`}>${k==='disc'?`<i class="sw" style="background:${discColor(cat)}"></i>`:''}${esc(cat)}</${k==='gen'?'span':'button'}>`}<span class="c num">${v}</span><span class="e num">≈ ${(v/sizes.length).toFixed(1)}</span><span class="bar"><i style="width:${v/max*100}%"></i></span></li>`).join('')}
+        ${blank?`<li><span class="k meta">NOT RECORDED</span><span class="c num meta">${blank}</span><span class="e"></span></li>`:''}
+      </ul>
+    </div>`}).join('');
+  return`
+  <div class="comp">
+    <section>
+      <div class="row-head">
+        <h2 class="h2">${J('COMPOSITION','編成')}</h2>
+      </div>
+      <div class="cols3">
+      <div class="block">
+        <div class="label">${J('GROUP SIZE','人数')}</div>
+        ${[['min','MIN',2,set.max,'最少'],['max','MAX',set.min,12,'最多'],['groups','GROUPS',1,Math.max(1,n),'グループ数']].map(([k,l,lo,hi,ja])=>{const v=k==='groups'?sizes.length:set[k];return`
+        <div class="size-line"><span class="label">${l}</span>
+        <div class="stepper">
+          <button id="${k}-dec" data-act="size" data-k="${k}" data-d="-1" aria-label="${l} minus one" ${v<=lo?'disabled':''}>−</button>
+          <input id="${k}-input" class="size-input" data-k="${k}" type="number" min="${lo}" max="${hi}" value="${pad(v)}" aria-label="${l}">
+          <button id="${k}-inc" data-act="size" data-k="${k}" data-d="1" aria-label="${l} plus one" ${v>=hi?'disabled':''}>+</button>
+        </div></div>`}).join('')}
+        ${!n||sizes.every(x=>x>=set.min&&x<=set.max)?'':`<div class="meta num"><span class="dot"></span> SOME GROUPS FALL OUTSIDE ${set.min}–${set.max} STUDENTS</div>`}
+        <div class="size-sum num">${st.join('<br>')}</div>
+        <div class="shape" aria-hidden="true">${sizes.map(s=>`<span>${'<i></i>'.repeat(s)}</span>`).join('')}</div>
+      </div>
+      <div class="block">
+        <div class="label">${J('PRIORITY','優先度')}</div>
+        <div class="prio">${prio}</div>
+      </div>
+      <div class="block">
+        <div class="label">${J('RULES','ルール')}</div>
+        <div class="rules">
+          <div class="block">
+            <div class="rule-head"><span class="label" style="color:var(--black)">${J('AVOID REPEATED PAIRS','同じ組み合わせを避ける')}</span><button class="toggle" data-act="avoid" aria-pressed="${set.avoidRepeat}">${set.avoidRepeat?'ON':'OFF'}</button></div>
+          </div>
+          <div class="block"><span class="label" style="color:var(--black)">${J('KEEP THESE STUDENTS APART','別のグループにする')}</span>${pairList('apart')}</div>
+          <div class="block"><span class="label" style="color:var(--black)">${J('KEEP THESE STUDENTS TOGETHER','同じグループにする')}</span>${pairList('together')}</div>
+        </div>
+      </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-lg" data-act="undo" ${past.length?'':'disabled'} title="Undo (⌘Z)">UNDO</button>
+        <button class="btn btn-lg" data-act="redo" ${future.length?'':'disabled'} title="Redo (⇧⌘Z)">REDO</button>
+        <div class="stack" style="gap:8px">
+          <button class="btn-primary ${ui.composing?'busy':''}" id="compose-btn" data-act="compose" ${n<2?'disabled':''}><span>${ui.composing?'COMPOSING…':'COMPOSE GROUPS'}</span><span class="sweep"></span></button>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="row-head">
+        <h2 class="h2">${J('DISTRIBUTION','分布')}</h2>
+      </div>
+      ${n?`<div class="cols3">${dist}</div>`:`<p class="prose">Add students first. 先に学生を追加してください。 <button class="t-btn strong" data-act="page" data-p="students">GO TO STUDENTS</button></p>`}
+    </section>
+  </div>`;
+}
+
+/* ---------- page 03 ---------- */
+function renderGroups(){
+  const se=cur();
+  if(!state.students.length)return`<div class="page-note"><h2 class="h2">${J('GROUPS','グループ')}</h2><p class="prose">There are no students yet.</p><p class="prose jp">学生がまだ登録されていません。</p><button class="btn" style="align-self:flex-start" data-act="page" data-p="students">ADD STUDENTS</button></div>`;
+  const groups=currentGroups();
+  if(!groups)return`<div class="page-note"><h2 class="h2">${J('GROUPS','グループ')}</h2><p class="prose">No groups have been composed yet.</p><p class="prose jp">グループはまだ編成されていません。</p><div style="max-width:320px"><button class="btn-primary" data-act="compose"><span>COMPOSE GROUPS</span><span class="sweep"></span></button></div><button class="t-btn" style="align-self:flex-start" data-act="page" data-p="composition">ADJUST COMPOSITION FIRST</button></div>`;
+  const ctx=buildCtx(),lockedS=new Set(se.lockedStudents),un=unassigned(),m=byId();
+  let repTotal=0,apartBad=0;
+  const cols=groups.map((g,gi)=>{
+    const st=statsOf(g.ids),att=attention(g.ids,st,ctx),iss=groupIssues(g.ids,ctx);
+    repTotal+=iss.rep.length;apartBad+=iss.apart.length;
+    const fl=ui.flash&&ui.flash[gi];
+    const val=k=>{const t=statText(st,k);const f=fl&&fl[k];const v=f?`<span class="was">${f[0]}</span><span class="arr">→</span><span class="now">${t}</span>`:`<span>${t}</span>`;return v+(att[k]?`<span class="tip" tabindex="0" data-tip="${esc(att[k])}"><span class="dot"></span></span>`:'')};
+    const togetherSplit=ctx.together.filter(([a,b])=>g.ids.includes(a)!==g.ids.includes(b)).map(([a,b])=>T(`${nameOf(a)} and ${nameOf(b)} are set to stay together.`,`${nameOf(a)} と ${nameOf(b)} は同じグループにする設定です。`));
+    return`
+    <section class="group ${g.locked?'locked':''}" data-g="${gi}" aria-label="Group ${pad(gi+1)}">
+      <header class="g-head">
+        <span class="g-num">${pad(gi+1)}</span>
+        ${g.locked?`<button class="lock-btn" data-act="group-lock" data-g="${gi}" title="Unlock group"><span class="tag solid">LOCKED</span></button>`:`<button class="t-btn lock-btn" data-act="group-lock" data-g="${gi}">LOCK</button>`}
+      </header>
+      <ol class="members">${g.ids.map(id=>memberHTML(m[id],lockedS.has(id))).join('')}</ol>
+      <dl class="g-stats">
+        <dt>DISCIPLINE</dt><dd>${val('disc')}</dd>
+        <dt>NATIONALITY</dt><dd>${val('nat')}<span class="sub">${natBreak(st)||'—'}</span></dd>
+        <dt>GENDER</dt><dd>${val('gen')}</dd>
+        ${g.ids.length<state.settings.min||g.ids.length>state.settings.max?`<dt>SIZE</dt><dd><span>${g.ids.length}</span><span class="tip" tabindex="0" data-tip="${T(`${g.ids.length} students. The set range is ${state.settings.min}–${state.settings.max}.`,`${g.ids.length}名。設定範囲は${state.settings.min}–${state.settings.max}名です。`)}"><span class="dot"></span></span></dd>`:''}
+        ${iss.rep.length?`<dt>REPEATED</dt><dd><span>${iss.rep.length} ${iss.rep.length===1?'PAIR':'PAIRS'}</span><span class="tip" tabindex="0" data-tip="${esc(iss.rep.join('\n\n'))}"><span class="dot"></span></span></dd>`:''}
+        ${iss.apart.length?`<dt>APART</dt><dd><span>NOT MET</span><span class="tip" tabindex="0" data-tip="${esc(iss.apart.join('\n\n'))}"><span class="dot"></span></span></dd>`:''}
+        ${togetherSplit.length?`<dt>TOGETHER</dt><dd><span>SPLIT</span><span class="tip" tabindex="0" data-tip="${esc(togetherSplit.join('\n\n'))}"><span class="dot"></span></span></dd>`:''}
+      </dl>
+    </section>`}).join('');
+  const togetherBad=ctx.together.filter(([a,b])=>{const ga=groups.findIndex(g=>g.ids.includes(a));return ga<0||!groups[ga].ids.includes(b)}).length;
+  const sizes=groups.map(g=>g.ids.length);
+  const lockedG=groups.filter(g=>g.locked).length;
+  const allLocked=groups.every(g=>g.locked);
+  return`
+  <div class="board-layout">
+    <aside class="side">
+      <div class="block">
+        <h2 class="h2">${J('GROUPS','グループ')}</h2>
+        <div class="size-sum num">${sizesText(sizes).join('<br>')}</div>
+      </div>
+      <div class="stack">
+        <button class="btn full" data-act="shuffle" ${allLocked?'disabled':''}>SHUFFLE UNLOCKED</button>
+        <div>
+          <button class="btn full" data-act="export-toggle" aria-expanded="${ui.exportOpen}">EXPORT</button>
+          ${ui.exportOpen?`<div class="export-opts">
+            <button data-act="export" data-m="text" aria-pressed="${ui.exportMode==='text'}">COPY TEXT</button>
+            <button data-act="export" data-m="csv" aria-pressed="${ui.exportMode==='csv'}">CSV</button>
+            <button data-act="export" data-m="print">PRINT</button>
+            ${ui.exportMode&&ui.exportMode!=='print'?`<div class="export-out"><textarea class="input" id="export-ta" readonly aria-label="Export text">${esc(ui.exportMode==='csv'?exportCSV():exportText())}</textarea><div class="meta" style="white-space:pre-line">${esc(ui.exportStatus)}</div>${ui.exportMode==='csv'?'<button class="t-btn strong" style="align-self:flex-start" data-act="download-csv">DOWNLOAD .CSV</button>':''}</div>`:ui.exportMode==='print'?`<div class="export-out"><div class="meta" style="white-space:pre-line">${esc(ui.exportStatus)}</div></div>`:''}
+          </div>`:''}
+        </div>
+        <button class="btn full" data-act="dist-toggle" aria-expanded="${ui.showDist}">VIEW DISTRIBUTION</button>
+      </div>
+      <dl class="facts num">
+        <dt>REPEATED PAIRS</dt><dd>${repTotal}${repTotal?'<span class="dot"></span>':''}</dd>
+        <dt>KEEP APART</dt><dd>${ctx.apart.size?`${ctx.apart.size-apartBad} / ${ctx.apart.size} MET${apartBad?'<span class="dot"></span>':''}`:'—'}</dd>
+        <dt>KEEP TOGETHER</dt><dd>${ctx.together.length?`${ctx.together.length-togetherBad} / ${ctx.together.length} MET${togetherBad?'<span class="dot"></span>':''}`:'—'}</dd>
+        <dt>LOCKED</dt><dd>${lockedG} ${lockedG===1?'GROUP':'GROUPS'} · ${se.lockedStudents.filter(id=>m[id]).length} STUDENTS</dd>
+      </dl>
+      <div class="block">
+        <div class="label">${J('PRIORITY','優先度')}</div>
+        <dl class="facts">${ATTRS.map(([k,l])=>`<dt>${l}</dt><dd>${WL[state.settings.w[k]]}</dd>`).join('')}</dl>
+        <button class="t-btn" style="align-self:flex-start" data-act="page" data-p="composition">EDIT COMPOSITION →</button>
+      </div>
+    </aside>
+    <section>
+      <div class="board-head">
+        <span class="label" style="color:var(--black)">${state.students.length} STUDENTS · ${groups.length} GROUPS</span>
+      </div>
+      ${un.length?`<div class="tray" data-g="-1"><div class="row" style="justify-content:space-between"><span class="label" style="color:var(--black)">${J('NOT IN A GROUP','未所属')}</span><span class="tip meta" tabindex="0" data-tip="${T('These students were added after the groups were composed. Drag them into a group or use Shuffle unlocked.','グループ編成後に追加された学生です。グループへドラッグするか、SHUFFLE UNLOCKED を使ってください。')}"><span>${un.length} STUDENTS</span><span class="dot"></span></span></div><ol class="members">${un.map(id=>memberHTML(m[id],false)).join('')}</ol></div>`:''}
+      <div class="board">${cols}</div>
+      ${ui.showDist?renderMatrix(groups):''}
+    </section>
+  </div>`;
+}
+function memberHTML(s,locked){
+  const meta=[s.nat,s.gen].filter(Boolean).join(' · ')||'—';
+  return`<li class="member" draggable="true" data-id="${s.id}">
+    <div class="m-name"><span class="nm" title="${esc(s.name)}">${esc(s.name)}</span>${locked?'<span class="tag" style="color:var(--graphite)">LOCKED</span>':''}</div>
+    <div class="m-disc" title="${esc(s.disc)}">${s.disc?`<i class="sw" style="background:${discColor(s.disc)}"></i>${esc(s.disc)}`:'<span class="dot"></span><span class="meta">—</span>'}</div>
+    <div class="m-meta">${esc(meta)}</div>
+    <button class="m-more" data-act="menu" data-id="${s.id}" aria-label="Actions for ${esc(s.name)}" aria-haspopup="menu" aria-expanded="${ui.menu&&ui.menu.id===s.id}">⋮</button>
+  </li>`;
+}
+function renderMatrix(groups){
+  const ctx=buildCtx();
+  const sec=(k,l)=>{const cats=sortEntries(k,counts(k)).map(([c])=>c);return`<tr class="sec"><td colspan="${groups.length+2}">${l}</td></tr>`+cats.map(cat=>{const tot=counts(k)[cat];return`<tr><td>${esc(cat)}</td>${groups.map(g=>{const st=counts(k,g.ids);const v=st[cat]||0;const n=Object.values(st).reduce((a,b)=>a+b,0);const hi=v>=2&&v>Math.ceil(n*(ctx.sh[k][cat]||0)-1e-9);return`<td class="${v?'':'z'} ${hi?'hi':''}">${v}${hi?' <span class="dot"></span>':''}</td>`}).join('')}<td class="tot">${tot}</td></tr>`}).join('')};
+  return`<div class="matrix-wrap">
+    <div class="row" style="justify-content:space-between"><span class="label" style="color:var(--black)">${J('DISTRIBUTION BY GROUP','グループ別の分布')}</span></div>
+    <table class="matrix"><thead><tr><th></th>${groups.map((_,i)=>`<th>${pad(i+1)}</th>`).join('')}<th class="tot">ALL</th></tr></thead>
+    <tbody>${sec('disc','DISCIPLINE')}${sec('nat','NATIONALITY')}${sec('gen','GENDER')}</tbody></table></div>`;
+}
+function exportText(){const m=byId();const gs=currentGroups()||[];let t=gs.map((g,i)=>`GROUP ${pad(i+1)}\n`+g.ids.map(id=>m[id].name).join('\n')).join('\n\n');const un=unassigned();if(un.length)t+='\n\nNOT IN A GROUP\n'+un.map(id=>m[id].name).join('\n');return t}
+function exportCSV(){const m=byId();const q=v=>/[",\n]/.test(v)?'"'+String(v).replace(/"/g,'""')+'"':v;const rows=[['group','name','gender','nationality','discipline']];(currentGroups()||[]).forEach((g,i)=>g.ids.forEach(id=>{const s=m[id];rows.push([pad(i+1),s.name,s.gen,s.nat,s.disc])}));unassigned().forEach(id=>{const s=m[id];rows.push(['',s.name,s.gen,s.nat,s.disc])});return rows.map(r=>r.map(v=>q(v||'')).join(',')).join('\n')}
+
+/* ---------- menu ---------- */
+function renderMenu(){
+  const layer=document.getElementById('menu-layer');
+  if(!ui.menu||ui.page!=='groups'||!currentGroups()){layer.innerHTML='';return}
+  const{id,x,y}=ui.menu,se=cur(),gs=currentGroups(),gi=gs.findIndex(g=>g.ids.includes(id)),locked=se.lockedStudents.includes(id),m=byId();
+  const left=Math.max(8,Math.min(x-220,window.innerWidth-228)),top=Math.min(y+6,window.innerHeight-(ui.menuSub?340:130));
+  let sub='';
+  if(ui.menuSub==='move')sub=`<div class="sub"><div class="grid">${gs.map((g,i)=>i===gi?'':`<button data-act="move-to" data-id="${id}" data-g="${i}">${pad(i+1)}</button>`).join('')}</div></div>`;
+  if(ui.menuSub==='swap')sub=`<div class="sub">${gs.map((g,i)=>i===gi?'':g.ids.map(o=>`<button data-act="swap-with" data-id="${id}" data-o="${o}"><span>${esc(m[o].name)}</span><span class="g">${pad(i+1)}</span></button>`).join('')).join('')}</div>`;
+  layer.innerHTML=`<div class="menu" role="menu" style="left:${left}px;top:${Math.max(8,top)}px">
+    ${gi>=0?`<button role="menuitem" data-act="student-lock" data-id="${id}"><span>${locked?'UNLOCK':'LOCK'}</span></button>`:''}
+    <button role="menuitem" data-act="menu-sub" data-s="move" aria-expanded="${ui.menuSub==='move'}"><span>MOVE TO…</span><span>${ui.menuSub==='move'?'−':'+'}</span></button>
+    ${ui.menuSub==='move'?sub:''}
+    ${gi>=0?`<button role="menuitem" data-act="menu-sub" data-s="swap" aria-expanded="${ui.menuSub==='swap'}"><span>SWAP WITH…</span><span>${ui.menuSub==='swap'?'−':'+'}</span></button>`:''}
+    ${ui.menuSub==='swap'?sub:''}
+  </div>`;
+}
+
+/* ---------- group mutations ---------- */
+function snapshotStats(gs,idxs){const o={};idxs.forEach(i=>{if(i>=0&&gs[i])o[i]=statsOf(gs[i].ids)});return o}
+function setFlash(before,after){const f={};for(const i in before){const d={};ATTRS.forEach(([k])=>{const b=statText(before[i],k),a=statText(after[i],k);if(b!==a)d[k]=[b,a]});if(Object.keys(d).length)f[i]=d}ui.flash=Object.keys(f).length?f:null}
+function moveTo(id,to){
+  const gs0=currentGroups();const from=gs0.findIndex(g=>g.ids.includes(id));if(from===to)return;
+  const before=snapshotStats(gs0,[from,to]);
+  commit(()=>{const se=cur();se.groups=currentGroups();se.groups.forEach(g=>g.ids=g.ids.filter(x=>x!==id));if(to>=0)se.groups[to].ids.push(id);else se.lockedStudents=se.lockedStudents.filter(x=>x!==id);
+    setFlash(before,snapshotStats(se.groups,[from,to]))});
+  render();
+}
+function swap(a,b){
+  if(a===b)return;const gs0=currentGroups();const ga=gs0.findIndex(g=>g.ids.includes(a)),gb=gs0.findIndex(g=>g.ids.includes(b));
+  if(ga===gb&&ga>=0){commit(()=>{const g=cur().groups=currentGroups();const L=g[ga].ids;const i=L.indexOf(a),j=L.indexOf(b);[L[i],L[j]]=[L[j],L[i]]});return}
+  const before=snapshotStats(gs0,[ga,gb]);
+  commit(()=>{const se=cur();se.groups=currentGroups();const g=se.groups;
+    if(ga>=0){const L=g[ga].ids;L[L.indexOf(a)]=b}if(gb>=0){const L=g[gb].ids;L[L.indexOf(b)]=a}
+    setFlash(before,snapshotStats(g,[ga,gb]))});
+  render();
+}
+
+/* ---------- events ---------- */
+function readEdit(){const v=id=>{const el=document.getElementById(id);return el?el.value.trim():''};const o={name:v('e-name'),gen:v('e-gen'),nat:v('e-nat').toUpperCase(),disc:v('e-disc').toUpperCase(),notes:v('e-notes'),custom:{}};state.customFields.forEach((c,j)=>{const x=v('e-c'+j);if(x)o.custom[c]=x});return o}
+function saveEdit(){
+  const o=readEdit();
+  if(ui.adding){if(!o.name){ui.adding=false;render();return}ui.adding=false;commit(()=>{state.students.push({id:newId(),...o})});return}
+  const id=ui.editId;ui.editId=null;if(!o.name){render();return}
+  const s=byId()[id];if(s&&['name','gen','nat','disc','notes'].every(k=>s[k]===o[k])&&JSON.stringify(s.custom||{})===JSON.stringify(o.custom)){render();return}
+  commit(()=>{const t=state.students.find(x=>x.id===id);Object.assign(t,o)});
+}
+function saveRename(){const r=ui.renaming;if(!r)return;const el=document.getElementById('rn-input');const v=el?el.value.trim().toUpperCase():'';ui.renaming=null;if(!v||v===r.cat){render();return}commit(()=>{state.students.forEach(s=>{if(s[r.k]===r.cat)s[r.k]=v})})}
+function setWeight(k,i){i=Math.max(0,Math.min(4,i));if(state.settings.w[k]===i)return;commit(()=>{state.settings.w[k]=i});const el=document.getElementById(`step-${k}-${i}`);if(el)el.focus()}
+function setSize(k,v){const st=state.settings,n=state.students.length;v=Math.round(v);if(!isFinite(v)){render();return}
+  if(k==='groups'){v=Math.min(Math.max(1,n),Math.max(1,v));if(v===groupCount(n)){render();return}commit(()=>{st.groups=v});return}
+  v=k==='min'?Math.max(2,Math.min(st.max,v)):Math.max(st.min,Math.min(12,v));if(v===st[k]){render();return}commit(()=>{st[k]=v;st.groups=null})}
+
+document.addEventListener('click',async e=>{
+  const t=e.target.closest('[data-act]');
+  if(!t){if(ui.menu&&!e.target.closest('.menu')){ui.menu=null;ui.menuSub=null;render()}
+    if(ui.editId&&!e.target.closest('tr.editing')&&ui.page==='students'){saveEdit()}
+    return}
+  if(ui.menu&&!t.closest('.menu')&&t.dataset.act!=='menu'){ui.menu=null;ui.menuSub=null}
+  const a=t.dataset.act,d=t.dataset;
+  switch(a){
+    case'page':ui.page=d.p;ui.editId=null;ui.adding=false;persist();render();window.scrollTo(0,0);break;
+    case'session':state.current=+d.i;persist();render();break;
+    case'session-new':commit(()=>{const n=state.sessions.length+1;state.sessions.push({id:'W'+pad(n),groups:null,lockedStudents:[]});state.current=state.sessions.length-1});ui.page='composition';render();break;
+    case'undo':undo();break;
+    case'redo':redo();break;
+    case'paste-open':ui.page='students';ui.pasteOpen=!ui.pasteOpen||ui.page!=='students';render();{const ta=document.getElementById('paste-ta');if(ta)ta.focus()}break;
+    case'paste-cancel':ui.pasteOpen=false;ui.pasteText='';render();break;
+    case'paste-replace':applyImport(true);break;
+    case'paste-append':applyImport(false);break;
+    case'csv-open':document.getElementById('csv-file').click();break;
+    case'load-sample':commit(()=>sampleState());break;
+    case'clear-list':commit(()=>emptyState());break;
+    case'clear-all':ui.page='students';ui.pasteOpen=false;ui.editId=null;ui.adding=false;ui.confirmClear=true;render();window.scrollTo(0,0);document.getElementById('clear-confirm')?.focus();break;
+    case'clear-cancel':ui.confirmClear=false;render();break;
+    case'clear-confirm':emptyState();past=[];future=[];ui.confirmClear=false;ui.menu=null;ui.exportOpen=false;ui.exportMode=null;ui.page='students';try{localStorage.removeItem(KEY)}catch(_){}persist();render();break;
+    case'add-student':if(ui.editId)saveEdit();ui.adding=true;render();document.getElementById('e-name')?.focus();break;
+    case'edit':if(e.target.closest('tr.editing'))break;if(ui.editId&&ui.editId!==d.id)saveEdit();if(ui.adding)ui.adding=false;ui.editId=d.id;render();{const r=document.getElementById('e-name');if(r)r.focus()}break;
+    case'remove':e.stopPropagation();commit(()=>{state.students=state.students.filter(s=>s.id!==d.id);state.settings.apart=state.settings.apart.filter(p=>!p.includes(d.id));state.settings.together=state.settings.together.filter(p=>!p.includes(d.id))});break;
+    case'save-edit':saveEdit();break;
+    case'cancel-edit':ui.editId=null;ui.adding=false;render();break;
+    case'size':setSize(d.k,(d.k==='groups'?groupCount(state.students.length):state.settings[d.k])+ +d.d);break;
+    case'weight':setWeight(d.k,+d.i);break;
+    case'more-rules':ui.moreRules=!ui.moreRules;render();break;
+    case'avoid':commit(()=>{state.settings.avoidRepeat=!state.settings.avoidRepeat});break;
+    case'rule-add':ui.ruleDraft=d.t;render();break;
+    case'rule-cancel':ui.ruleDraft=null;render();break;
+    case'rule-save':{const x=document.getElementById('rd-a').value,y=document.getElementById('rd-b').value;ui.ruleDraft=null;if(x===y||state.settings[d.t].some(p=>pk(p[0],p[1])===pk(x,y))){render();break}commit(()=>{state.settings[d.t].push([x,y])});break}
+    case'rename':ui.renaming={k:d.k,cat:d.cat};render();{const el=document.getElementById('rn-input');if(el){el.focus();el.select()}}break;
+    case'rule-remove':commit(()=>{state.settings[d.t].splice(+d.i,1)});break;
+    case'compose':{
+      if(ui.composing)break;ui.composing=true;
+      const btn=t;btn.classList.add('busy');btn.querySelector('span').textContent='COMPOSING…';btn.disabled=true;
+      await new Promise(r=>setTimeout(r,40));
+      const seed=Date.now()%1e9,res=composeFresh(seed,10);
+      await new Promise(r=>setTimeout(r,500));
+      ui.composing=false;ui.flash=null;ui.page='groups';
+      commit(()=>{const se=cur();se.groups=res;se.lockedStudents=[]});window.scrollTo(0,0);break}
+    case'shuffle':{const res=shuffleUnlocked(Date.now()%1e9);ui.flash=null;commit(()=>{cur().groups=res});break}
+    case'export-toggle':ui.exportOpen=!ui.exportOpen;ui.exportMode=null;render();break;
+    case'export':{
+      ui.exportMode=d.m;ui.exportStatus='';
+      if(d.m==='print'){render();try{window.print();ui.exportStatus=T('If no print dialog opened, print from your browser menu.','印刷画面が開かない場合は、ブラウザのメニューから印刷してください。')}catch(_){ui.exportStatus=T('Printing is not available here. Copy the text instead.','ここでは印刷できません。テキストをコピーしてください。')}render();break}
+      render();const txt=d.m==='csv'?exportCSV():exportText();let ok=false;
+      try{await navigator.clipboard.writeText(txt);ok=true}catch(_){try{const ta=document.getElementById('export-ta');ta.focus();ta.select();ok=document.execCommand('copy')}catch(__){}}
+      ui.exportStatus=ok?(d.m==='csv'?T('CSV copied to clipboard. Paste it into a spreadsheet.','CSV をコピーしました。表計算ソフトに貼り付けてください。'):T('Copied to clipboard.','コピーしました。')):T('Select the text above and copy it.','上のテキストを選択してコピーしてください。');render();break}
+    case'download-csv':{try{const b=new Blob(['\ufeff'+exportCSV()],{type:'text/csv;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`groups-${cur().id}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000)}catch(_){}break}
+    case'dist-toggle':ui.showDist=!ui.showDist;render();break;
+    case'group-lock':commit(()=>{const se=cur();se.groups=currentGroups();se.groups[+d.g].locked=!se.groups[+d.g].locked});break;
+    case'menu':{e.stopPropagation();if(ui.menu&&ui.menu.id===d.id){ui.menu=null}else{const r=t.getBoundingClientRect();ui.menu={id:d.id,x:r.right,y:r.bottom};ui.menuSub=null}render();break}
+    case'menu-sub':ui.menuSub=ui.menuSub===d.s?null:d.s;renderMenu();break;
+    case'student-lock':ui.menu=null;commit(()=>{const se=cur();se.lockedStudents=se.lockedStudents.includes(d.id)?se.lockedStudents.filter(x=>x!==d.id):se.lockedStudents.concat(d.id)});break;
+    case'move-to':ui.menu=null;moveTo(d.id,+d.g);break;
+    case'swap-with':ui.menu=null;swap(d.id,d.o);break;
+  }
+});
+document.addEventListener('focusout',e=>{if(e.target.id==='rn-input'&&ui.renaming)setTimeout(saveRename,0)});
+document.addEventListener('input',e=>{if(e.target.id==='paste-ta'){ui.pasteText=e.target.value;document.getElementById('paste-preview').innerHTML=pastePreview()}});
+document.addEventListener('change',e=>{if(e.target.classList.contains('size-input'))setSize(e.target.dataset.k,+e.target.value)});
+document.addEventListener('keydown',e=>{
+  const tag=(e.target.tagName||'').toLowerCase(),typing=tag==='input'||tag==='textarea'||tag==='select';
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='z'&&!typing){e.preventDefault();e.shiftKey?redo():undo();return}
+  if(e.key==='Escape'){if(ui.menu){ui.menu=null;render();return}if(ui.editId||ui.adding){ui.editId=null;ui.adding=false;render();return}if(ui.pasteOpen){ui.pasteOpen=false;render();return}}
+  if(e.target.id==='rn-input'){if(e.key==='Enter'){e.preventDefault();saveRename()}else if(e.key==='Escape'){ui.renaming=null;render()}return}
+  if(e.key==='Enter'&&e.target.closest&&e.target.closest('tr.editing')&&tag!=='select'){e.preventDefault();saveEdit();return}
+  const steps=e.target.closest&&e.target.closest('.steps');
+  if(steps&&(e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='ArrowDown')){e.preventDefault();const k=steps.dataset.k;setWeight(k,state.settings.w[k]+(e.key==='ArrowRight'||e.key==='ArrowUp'?1:-1))}
+});
+window.addEventListener('scroll',()=>{if(ui.menu){ui.menu=null;ui.menuSub=null;renderMenu()}},{passive:true});
+document.getElementById('csv-file').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{ui.pasteText=String(r.result||'');ui.pasteOpen=true;ui.page='students';render()};r.readAsText(f);e.target.value=''});
+
+/* drag and drop */
+let dragId=null,hl=[];
+const clearHl=()=>{hl.forEach(el=>el.classList.remove('drop','swap'));hl=[]};
+document.addEventListener('dragstart',e=>{const m=e.target.closest&&e.target.closest('.member');if(!m)return;dragId=m.dataset.id;m.classList.add('dragging');ui.menu=null;renderMenu();try{e.dataTransfer.setData('text/plain',dragId);e.dataTransfer.effectAllowed='move'}catch(_){}});
+document.addEventListener('dragend',e=>{document.querySelectorAll('.dragging').forEach(x=>x.classList.remove('dragging'));clearHl();dragId=null});
+document.addEventListener('dragover',e=>{
+  if(!dragId)return;const g=e.target.closest('.group,.tray');if(!g){clearHl();return}
+  e.preventDefault();e.dataTransfer.dropEffect='move';
+  const m=e.target.closest('.member');const want=[];
+  if(m&&m.dataset.id!==dragId)want.push([m,'swap']);else want.push([g,'drop']);
+  if(hl.length===1&&hl[0]===want[0][0]&&hl[0].classList.contains(want[0][1]))return;
+  clearHl();want.forEach(([el,c])=>{el.classList.add(c);hl.push(el)});
+});
+document.addEventListener('drop',e=>{
+  if(!dragId)return;const g=e.target.closest('.group,.tray');if(!g)return;e.preventDefault();
+  const id=dragId;dragId=null;clearHl();
+  const m=e.target.closest('.member');
+  if(m&&m.dataset.id!==id)swap(id,m.dataset.id);else if(!m||m.dataset.id!==id)moveTo(id,+g.dataset.g);
+});
+
+render();
+})();
+</script>
+
+</body>
+</html>
