@@ -132,7 +132,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .add-row{padding-top:18px}
 
 /* empty */
-.empty{padding-block:12vh 10vh;display:flex;flex-direction:column;gap:40px;max-width:640px}
+.empty{padding-block:48px;display:flex;flex-direction:column;gap:40px;max-width:640px}
 .empty p{font-size:26px;line-height:1.35;letter-spacing:.04em;line-height:1.6;margin:0;font-weight:var(--w-regular)}
 
 /* paste */
@@ -312,20 +312,41 @@ const W=[0,.25,.5,.75,1];
 const WL=['OFF','LOW','MEDIUM','HIGH','HIGHEST'];
 const ATTRS=[['disc','DISCIPLINE'],['nat','NATIONALITY'],['gen','GENDER']];
 const GORDER=['F','M','X'];
-const KEY='group-composer-v3';
+const KEY='group-composer-v5';
 
 const SAMPLE=[
- ['田中 花子','F','JP','VISUAL',''],['王 晨','M','CN','ILLUSTRATION',''],['Kim Mina','F','KR','MEDIA',''],
- ['佐藤 蓮','M','JP','GAME',''],['陳 雨桐','F','CN','ILLUSTRATION',''],['Park Jihoon','M','KR','MEDIA',''],
- ['林 佳穎','F','TW','VISUAL','Exchange, spring term'],['山田 さくら','F','JP','ILLUSTRATION',''],['李 浩然','M','CN','VISUAL',''],
- ['鈴木 陽菜','F','JP','VISUAL',''],['高橋 湊','M','JP','MEDIA',''],['伊藤 美咲','F','JP','GAME',''],
- ['渡辺 悠真','M','JP','ILLUSTRATION',''],['張 欣怡','F','CN','MEDIA',''],['小林 結衣','F','JP','VISUAL',''],
- ['加藤 大翔','M','JP','ILLUSTRATION',''],['Lee Seoyeon','F','KR','GAME',''],['吉田 葵','F','JP','VISUAL',''],
- ['劉 子軒','M','CN','GAME',''],['中村 凛','X','JP','MEDIA',''],['松本 芽依','F','JP','ILLUSTRATION',''],
- ['井上 颯','M','JP','VISUAL',''],['Choi Yuna','F','KR','MEDIA',''],['木村 陽斗','M','JP','ILLUSTRATION',''],
- ['楊 思琪','F','CN','VISUAL',''],['清水 楓','F','JP','GAME',''],['Camille Martin','F','FR','MEDIA','Exchange, spring term'],
- ['山本 蒼','M','JP','VISUAL',''],['周 明','M','CN','ILLUSTRATION',''],['森 千尋','','JP','VISUAL','Gender left blank'],
- ['黄 嘉欣','F','CN','GAME',''],['斎藤 陸','M','JP','ILLUSTRATION','']
+ ['KUA花子','F','JP','VISUAL',''],
+ ['张子轩','M','CN','ILLUSTRATION',''],
+ ['Kim Younghee','F','KR','MEDIA',''],
+ ['瓜生太郎','M','JP','GAME',''],
+ ['李梓涵','F','CN','ILLUSTRATION',''],
+ ['Hong Gildong','M','KR','MEDIA',''],
+ ['陳小美','F','TW','VISUAL','Exchange, spring term'],
+ ['瓜生花子','F','JP','ILLUSTRATION',''],
+ ['王浩宇','M','CN','VISUAL',''],
+ ['KUA桜子','F','JP','VISUAL',''],
+ ['KUA太郎','M','JP','MEDIA',''],
+ ['瓜生桜子','F','JP','GAME',''],
+ ['瓜生次郎','M','JP','ILLUSTRATION',''],
+ ['张欣怡','F','CN','MEDIA',''],
+ ['KUA和子','F','JP','VISUAL',''],
+ ['KUA次郎','M','JP','ILLUSTRATION',''],
+ ['Park Younghee','F','KR','GAME',''],
+ ['瓜生和子','F','JP','VISUAL',''],
+ ['李宇轩','M','CN','GAME',''],
+ ['瓜生まこと','X','JP','MEDIA',''],
+ ['KUA洋子','F','JP','ILLUSTRATION',''],
+ ['瓜生三郎','M','JP','VISUAL',''],
+ ['Choi Younghee','F','KR','MEDIA',''],
+ ['KUA三郎','M','JP','ILLUSTRATION',''],
+ ['王一诺','F','CN','VISUAL',''],
+ ['瓜生洋子','F','JP','GAME',''],
+ ['Marie Dupont','F','FR','MEDIA','Exchange, spring term'],
+ ['瓜生一郎','M','JP','VISUAL',''],
+ ['刘皓轩','M','CN','ILLUSTRATION',''],
+ ['KUAひかる','','JP','VISUAL','Gender left blank'],
+ ['陈雨桐','F','CN','GAME',''],
+ ['KUA一郎','M','JP','ILLUSTRATION','']
 ];
 
 let state, past=[], future=[], uid=0;
@@ -336,6 +357,7 @@ const J=(en,ja)=>`${en}<span class="ja">${ja}</span>`;
 const T=(en,ja)=>en+'\n'+ja;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pad=n=>String(n).padStart(2,'0');
+const gl=i=>{let s='';i++;while(i>0){const r=(i-1)%26;s=String.fromCharCode(65+r)+s;i=Math.floor((i-1)/26)}return s};
 const pk=(a,b)=>a<b?a+'|'+b:b+'|'+a;
 const newId=()=>'s'+Date.now().toString(36)+(uid++).toString(36);
 function rngFrom(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -484,7 +506,7 @@ function sampleState(){
 }
 function emptyState(){state={students:[],customFields:[],settings:{min:4,max:5,groups:null,w:{disc:3,nat:2,gen:2},avoidRepeat:true,apart:[],together:[]},sessions:[{id:'W01',groups:null,lockedStudents:[]}],current:0,sample:false}}
 try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&saved.state&&saved.state.students){state=saved.state;ui.page=saved.page||'groups'}}catch(e){}
-if(!state)sampleState();
+if(!state){emptyState();ui.page='students'}
 state.current=state.sessions.length-1;
 
 /* ---------- render: shell ---------- */
@@ -522,8 +544,6 @@ function renderStudents(){
   const n=state.students.length;
   if(!n&&!ui.pasteOpen&&!ui.adding)return`
     <section class="empty">
-      <p>Compose heterogeneous student groups<br>across disciplines and backgrounds.</p>
-      <p style="font-size:.72em;margin-top:-24px">専攻や背景の異なる学生で、多様なグループを編成します。</p>
       <div class="stack" style="max-width:260px">
         <button class="btn full" data-act="paste-open">PASTE STUDENTS</button>
         <button class="btn full" data-act="csv-open">IMPORT CSV</button>
@@ -597,7 +617,7 @@ function renderPaste(){
       <p class="prose">Copy the rows from Excel, Google Sheets or Numbers and paste them here. A header row helps; columns such as Name, Gender, Nationality and Discipline (or 氏名, 性別, 国籍, 専攻) are recognised. Other columns are kept as custom fields.</p>
       <p class="prose jp">Excel・Google スプレッドシート・Numbers から行をコピーして貼り付けてください。見出し行があると確実です。Name・GENDER・NATIONALITY・DISCIPLINE（または 氏名・性別・国籍・専攻）を認識します。その他の列はカスタム項目として残ります。</p>
     </div>
-    <textarea class="input" id="paste-ta" rows="10" placeholder="Name&#9;Gender&#9;Nationality&#9;Discipline&#10;田中 花子&#9;F&#9;JP&#9;Visual">${esc(ui.pasteText)}</textarea>
+    <textarea class="input" id="paste-ta" rows="10" placeholder="Name&#9;Gender&#9;Nationality&#9;Discipline&#10;瓜生太郎&#9;M&#9;JP&#9;Visual">${esc(ui.pasteText)}</textarea>
     <div id="paste-preview">${pastePreview()}</div>
   </div>`;
 }
@@ -666,13 +686,13 @@ function renderComposition(){
         <div class="prio">${prio}</div>
       </div>
       <div class="block">
-        <div class="label">${J('RULES','ルール')}</div>
+        <div class="label">RULES</div>
         <div class="rules">
           <div class="block">
-            <div class="rule-head"><span class="label" style="color:var(--black)">${J('AVOID REPEATED PAIRS','同じ組み合わせを避ける')}</span><button class="toggle" data-act="avoid" aria-pressed="${set.avoidRepeat}">${set.avoidRepeat?'ON':'OFF'}</button></div>
+            <div class="rule-head"><span class="label" style="color:var(--black)">AVOID REPEATED PAIRS</span><button class="toggle" data-act="avoid" aria-pressed="${set.avoidRepeat}">${set.avoidRepeat?'ON':'OFF'}</button></div>
           </div>
-          <div class="block"><span class="label" style="color:var(--black)">${J('KEEP THESE STUDENTS APART','別のグループにする')}</span>${pairList('apart')}</div>
-          <div class="block"><span class="label" style="color:var(--black)">${J('KEEP THESE STUDENTS TOGETHER','同じグループにする')}</span>${pairList('together')}</div>
+          <div class="block"><span class="label" style="color:var(--black)">KEEP THESE STUDENTS APART</span>${pairList('apart')}</div>
+          <div class="block"><span class="label" style="color:var(--black)">KEEP THESE STUDENTS TOGETHER</span>${pairList('together')}</div>
         </div>
       </div>
       </div>
@@ -688,7 +708,7 @@ function renderComposition(){
       <div class="row-head">
         <h2 class="h2">${J('DISTRIBUTION','分布')}</h2>
       </div>
-      ${n?`<div class="cols3">${dist}</div>`:`<p class="prose">Add students first. 先に学生を追加してください。 <button class="t-btn strong" data-act="page" data-p="students">GO TO STUDENTS</button></p>`}
+      ${n?`<div class="cols3">${dist}</div>`:`<p class="prose">Add students first. <button class="t-btn strong" data-act="page" data-p="students">GO TO STUDENTS</button></p>`}
     </section>
   </div>`;
 }
@@ -708,9 +728,9 @@ function renderGroups(){
     const val=k=>{const t=statText(st,k);const f=fl&&fl[k];const v=f?`<span class="was">${f[0]}</span><span class="arr">→</span><span class="now">${t}</span>`:`<span>${t}</span>`;return v+(att[k]?`<span class="tip" tabindex="0" data-tip="${esc(att[k])}"><span class="dot"></span></span>`:'')};
     const togetherSplit=ctx.together.filter(([a,b])=>g.ids.includes(a)!==g.ids.includes(b)).map(([a,b])=>T(`${nameOf(a)} and ${nameOf(b)} are set to stay together.`,`${nameOf(a)} と ${nameOf(b)} は同じグループにする設定です。`));
     return`
-    <section class="group ${g.locked?'locked':''}" data-g="${gi}" aria-label="Group ${pad(gi+1)}">
+    <section class="group ${g.locked?'locked':''}" data-g="${gi}" aria-label="Group ${gl(gi)}">
       <header class="g-head">
-        <span class="g-num">${pad(gi+1)}</span>
+        <span class="g-num">${gl(gi)}</span>
         ${g.locked?`<button class="lock-btn" data-act="group-lock" data-g="${gi}" title="Unlock group"><span class="tag solid">LOCKED</span></button>`:`<button class="t-btn lock-btn" data-act="group-lock" data-g="${gi}">LOCK</button>`}
       </header>
       <ol class="members">${g.ids.map(id=>memberHTML(m[id],lockedS.has(id))).join('')}</ol>
@@ -784,11 +804,11 @@ function renderMatrix(groups){
   const sec=(k,l)=>{const cats=sortEntries(k,counts(k)).map(([c])=>c);return`<tr class="sec"><td colspan="${groups.length+2}">${l}</td></tr>`+cats.map(cat=>{const tot=counts(k)[cat];return`<tr><td>${esc(cat)}</td>${groups.map(g=>{const st=counts(k,g.ids);const v=st[cat]||0;const n=Object.values(st).reduce((a,b)=>a+b,0);const hi=v>=2&&v>Math.ceil(n*(ctx.sh[k][cat]||0)-1e-9);return`<td class="${v?'':'z'} ${hi?'hi':''}">${v}${hi?' <span class="dot"></span>':''}</td>`}).join('')}<td class="tot">${tot}</td></tr>`}).join('')};
   return`<div class="matrix-wrap">
     <div class="row" style="justify-content:space-between"><span class="label" style="color:var(--black)">${J('DISTRIBUTION BY GROUP','グループ別の分布')}</span></div>
-    <table class="matrix"><thead><tr><th></th>${groups.map((_,i)=>`<th>${pad(i+1)}</th>`).join('')}<th class="tot">ALL</th></tr></thead>
+    <table class="matrix"><thead><tr><th></th>${groups.map((_,i)=>`<th>${gl(i)}</th>`).join('')}<th class="tot">ALL</th></tr></thead>
     <tbody>${sec('disc','DISCIPLINE')}${sec('nat','NATIONALITY')}${sec('gen','GENDER')}</tbody></table></div>`;
 }
-function exportText(){const m=byId();const gs=currentGroups()||[];let t=gs.map((g,i)=>`GROUP ${pad(i+1)}\n`+g.ids.map(id=>m[id].name).join('\n')).join('\n\n');const un=unassigned();if(un.length)t+='\n\nNOT IN A GROUP\n'+un.map(id=>m[id].name).join('\n');return t}
-function exportCSV(){const m=byId();const q=v=>/[",\n]/.test(v)?'"'+String(v).replace(/"/g,'""')+'"':v;const rows=[['group','name','gender','nationality','discipline']];(currentGroups()||[]).forEach((g,i)=>g.ids.forEach(id=>{const s=m[id];rows.push([pad(i+1),s.name,s.gen,s.nat,s.disc])}));unassigned().forEach(id=>{const s=m[id];rows.push(['',s.name,s.gen,s.nat,s.disc])});return rows.map(r=>r.map(v=>q(v||'')).join(',')).join('\n')}
+function exportText(){const m=byId();const gs=currentGroups()||[];let t=gs.map((g,i)=>`GROUP ${gl(i)}\n`+g.ids.map(id=>m[id].name).join('\n')).join('\n\n');const un=unassigned();if(un.length)t+='\n\nNOT IN A GROUP\n'+un.map(id=>m[id].name).join('\n');return t}
+function exportCSV(){const m=byId();const q=v=>/[",\n]/.test(v)?'"'+String(v).replace(/"/g,'""')+'"':v;const rows=[['group','name','gender','nationality','discipline']];(currentGroups()||[]).forEach((g,i)=>g.ids.forEach(id=>{const s=m[id];rows.push([gl(i),s.name,s.gen,s.nat,s.disc])}));unassigned().forEach(id=>{const s=m[id];rows.push(['',s.name,s.gen,s.nat,s.disc])});return rows.map(r=>r.map(v=>q(v||'')).join(',')).join('\n')}
 
 /* ---------- menu ---------- */
 function renderMenu(){
@@ -797,8 +817,8 @@ function renderMenu(){
   const{id,x,y}=ui.menu,se=cur(),gs=currentGroups(),gi=gs.findIndex(g=>g.ids.includes(id)),locked=se.lockedStudents.includes(id),m=byId();
   const left=Math.max(8,Math.min(x-220,window.innerWidth-228)),top=Math.min(y+6,window.innerHeight-(ui.menuSub?340:130));
   let sub='';
-  if(ui.menuSub==='move')sub=`<div class="sub"><div class="grid">${gs.map((g,i)=>i===gi?'':`<button data-act="move-to" data-id="${id}" data-g="${i}">${pad(i+1)}</button>`).join('')}</div></div>`;
-  if(ui.menuSub==='swap')sub=`<div class="sub">${gs.map((g,i)=>i===gi?'':g.ids.map(o=>`<button data-act="swap-with" data-id="${id}" data-o="${o}"><span>${esc(m[o].name)}</span><span class="g">${pad(i+1)}</span></button>`).join('')).join('')}</div>`;
+  if(ui.menuSub==='move')sub=`<div class="sub"><div class="grid">${gs.map((g,i)=>i===gi?'':`<button data-act="move-to" data-id="${id}" data-g="${i}">${gl(i)}</button>`).join('')}</div></div>`;
+  if(ui.menuSub==='swap')sub=`<div class="sub">${gs.map((g,i)=>i===gi?'':g.ids.map(o=>`<button data-act="swap-with" data-id="${id}" data-o="${o}"><span>${esc(m[o].name)}</span><span class="g">${gl(i)}</span></button>`).join('')).join('')}</div>`;
   layer.innerHTML=`<div class="menu" role="menu" style="left:${left}px;top:${Math.max(8,top)}px">
     ${gi>=0?`<button role="menuitem" data-act="student-lock" data-id="${id}"><span>${locked?'UNLOCK':'LOCK'}</span></button>`:''}
     <button role="menuitem" data-act="menu-sub" data-s="move" aria-expanded="${ui.menuSub==='move'}"><span>MOVE TO…</span><span>${ui.menuSub==='move'?'−':'+'}</span></button>
