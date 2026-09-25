@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300..700&display=swap">
+<script>(function(){var b=["mint","pink","lilac"][Math.floor(Math.random()*3)];document.documentElement.setAttribute("data-bg",b);var c={mint:"#B3FFE0",pink:"#FCDBF4",lilac:"#EFD9FF"}[b];var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",c)})();</script>
 <style>
 :root{
   --bg:#B3FFE0; --surface:#FFFFFF;
@@ -19,21 +20,24 @@
   --line:#7FCFB0; --line-strong:#1E3C4C; --silver:#C9CED2; --graphite:#1E3C4C;
   --hover:rgba(30,60,76,.07);
   --blue:#6CB2FF; --blue-hover:#559FEF; --on-blue:#1E3C4C; --blue-light:#C6E1FF; --blue-pale:#FFFFFF; --blue-dark:#2F7FD8;
+  --group:#2439FF; --hover-bg:#FCDBF4;
   --orange:#F0561D; --orange-light:#F29D7A;
-  --d1:#6F8CFF; --d2:#F29A55; --d3:#C3C9CC; --d4:#B9A7F2; --d5:#3E7A5A; --d6:#FFFFFF;
+  --d1:#2F5BFF; --d2:#E2571B; --d3:#7A3FD6; --d4:#D12F7A; --d5:#8A5A00; --d6:#0E6E7A;
   --ease:cubic-bezier(0.2,0.8,0.2,1);
   --font:"Noto Sans JP","Noto Sans Japanese",游ゴシック体,"Yu Gothic",YuGothic,"Hiragino Kaku Gothic Pro","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
   --w-regular:350; --w-medium:500; --w-bold:600;
   --track:.046em; --track-caps:.1em;
 }
 *{box-sizing:border-box}
+:root[data-bg="pink"]{--bg:#FCDBF4;--line:#E3A6D2;--hover-bg:#EFD9FF}
+:root[data-bg="lilac"]{--bg:#EFD9FF;--line:#C9A7EC;--hover-bg:#B3FFE0}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--black);font-family:var(--font);font-size:14px;line-height:1.5;font-weight:var(--w-regular);letter-spacing:var(--track);font-feature-settings:"palt";-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:0}
 button:disabled{opacity:.35;cursor:default}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 input,select,textarea{font:inherit;color:inherit}
-.wrap{max-width:1440px;margin:0 auto;padding-inline:56px;padding-block:20px 56px}
+.wrap{max-width:1440px;margin:0 auto;padding-inline:36px;padding-block:20px 56px}
 #app{min-height:calc(100vh - 80px)}
 .num{font-variant-numeric:tabular-nums}
 .confirm{display:flex;flex-direction:column;gap:10px;padding:14px;background:var(--surface)}
@@ -54,14 +58,14 @@ input,select,textarea{font:inherit;color:inherit}
 .sessions{display:flex;align-items:center;gap:14px}
 .sessions .label{margin-right:4px}
 .sess{font-size:12px;letter-spacing:var(--track-caps);color:var(--muted);padding:4px 0;border-bottom:1px solid transparent;transition:color 120ms var(--ease)}
-.sess:hover{color:var(--black)}
+.sess:hover{color:var(--black);background:var(--hover-bg);box-shadow:0 0 0 5px var(--hover-bg)}
 .sess[aria-current="true"]{color:var(--black);border-bottom-color:var(--black)}
 .history{display:flex;gap:16px}
-.stage-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;margin-top:18px;padding-bottom:0}
+.stage-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;margin-top:18px;padding-bottom:10px;border-bottom:1px solid var(--line-strong)}
 .stages{display:flex;gap:12px 44px;flex-wrap:wrap}
 .stage{font-size:12px;letter-spacing:var(--track-caps);color:var(--muted);transition:color 120ms var(--ease)}
 .stage .n{margin-right:10px}
-.stage:hover{color:var(--graphite)}
+.stage:hover{color:var(--black);background:var(--hover-bg);box-shadow:0 0 0 5px var(--hover-bg)}
 .stage[aria-current="page"]{color:var(--black)}
 .count{font-size:12px;letter-spacing:var(--track-caps);display:flex;gap:14px;align-items:center}
 
@@ -73,18 +77,18 @@ input,select,textarea{font:inherit;color:inherit}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 18px;border:1px solid var(--graphite);border-radius:1px;font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;transition:background 120ms var(--ease);white-space:nowrap}
-.btn:hover:not(:disabled){background:var(--hover)}
+.btn:hover:not(:disabled){background:var(--hover-bg)}
 .btn:active:not(:disabled){background:var(--blue-pale)}
 .btn[aria-expanded="true"]{background:var(--black);color:var(--surface);border-color:var(--black)}
 .btn.full{width:100%}
 .btn-primary{position:relative;overflow:hidden;display:flex;color:var(--on-blue);align-items:center;justify-content:center;width:100%;height:44px;background:var(--blue);border-radius:1px;font-size:12.5px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
-.btn-primary:hover:not(:disabled){background:var(--blue-hover)}
+.btn-primary:hover:not(:disabled){background:var(--hover-bg)}
 .btn-primary:active:not(:disabled){background:var(--black)}
 .btn-primary .sweep{position:absolute;left:0;bottom:14px;height:1px;width:38%;background:var(--on-blue);transform:translateX(-100%);opacity:0}
 .btn-primary.busy .sweep{opacity:1;animation:sweep 540ms var(--ease) 1 forwards}
 @keyframes sweep{to{transform:translateX(265%)}}
 .t-btn{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--text-2);padding:4px 0;transition:color 120ms var(--ease)}
-.t-btn:hover:not(:disabled){color:var(--black)}
+.t-btn:hover:not(:disabled){color:var(--black);background:var(--hover-bg);box-shadow:0 0 0 5px var(--hover-bg)}
 .t-btn.strong{color:var(--black)}
 .stack{display:flex;flex-direction:column;gap:10px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -103,6 +107,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .tip{position:relative;display:inline-flex;align-items:center;gap:6px;cursor:help}
 .tip::after{content:attr(data-tip);white-space:pre-line!important;position:absolute;right:-4px;bottom:calc(100% + 8px);width:max-content;max-width:230px;background:var(--black);color:var(--surface);font-size:11px;line-height:1.45;letter-spacing:var(--track);text-transform:none;font-weight:var(--w-regular);padding:7px 9px;border-radius:1px;opacity:0;pointer-events:none;transition:opacity 120ms var(--ease);z-index:30;text-align:left;white-space:normal}
 .tip:hover::after,.tip:focus-visible::after{opacity:1}
+.dc{font-weight:700;letter-spacing:.06em}
 .sw{display:inline-block;width:8px;height:8px;border-radius:1px;flex:none;box-shadow:inset 0 0 0 1px rgba(30,60,76,.3)}
 
 /* page grid */
@@ -114,7 +119,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 /* students table */
 .tbl-wrap{overflow-x:auto}
 .tbl{width:100%;border-collapse:collapse}
-.tbl th{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--text-2);text-align:left;padding:0 16px 8px 0;white-space:nowrap}
+.tbl th{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--text-2);text-align:left;padding:0 16px 8px 0;white-space:nowrap;border-bottom:1px solid var(--line-strong)}
 .tbl td{padding:6px 16px 6px 0;vertical-align:middle;white-space:nowrap}
 .tbl tbody tr{transition:background 120ms var(--ease)}
 .tbl tbody tr.r:hover{background:var(--surface);cursor:text}
@@ -132,7 +137,10 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .add-row{padding-top:18px}
 
 /* empty */
-.empty{padding-block:48px;display:flex;flex-direction:column;gap:40px;max-width:640px}
+.empty{min-height:calc(100vh - 260px);padding-block:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center}
+.empty-actions{display:grid;grid-template-columns:repeat(2,minmax(0,260px));gap:14px;width:100%;justify-content:center}
+.btn-xl{height:56px;font-size:12.5px;width:100%}
+.empty .meta.caps{font-size:10.5px;letter-spacing:var(--track-caps);color:var(--muted)}
 .empty p{font-size:26px;line-height:1.35;letter-spacing:.04em;line-height:1.6;margin:0;font-weight:var(--w-regular)}
 
 /* paste */
@@ -144,7 +152,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 /* composition */
 .stepper{display:flex;align-items:stretch;height:48px;width:max-content}
 .stepper button{width:48px;border:1px solid var(--line);font-size:18px;transition:background 120ms var(--ease)}
-.stepper button:hover:not(:disabled){background:var(--hover)}
+.stepper button:hover:not(:disabled){background:var(--hover-bg)}
 .stepper input{width:76px;border:1px solid var(--line);border-inline:0;background:transparent;text-align:center;font-size:24px;letter-spacing:.04em;border-radius:0;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
 .stepper input::-webkit-inner-spin-button,.stepper input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .stepper input:focus{outline:none;border-color:var(--black);border-inline:1px solid var(--black)}
@@ -167,10 +175,10 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .step i{width:11px;height:11px;border-radius:50%;border:1px solid var(--graphite);background:var(--bg);transition:background 120ms var(--ease),border-color 120ms var(--ease)}
 .step.on i{background:var(--blue);border-color:var(--blue-dark)}
 .step.cur i{background:var(--black);border-color:var(--black)}
-.step:hover i{border-color:var(--black)}
+.step:hover i{border-color:var(--black);box-shadow:0 0 0 4px var(--hover-bg)}
 .more-toggle{display:flex;justify-content:space-between;width:100%;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps)}
 .comp{margin-top:28px;display:flex;flex-direction:column;gap:40px}
-.row-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px 40px;flex-wrap:wrap;padding-bottom:0;margin-bottom:18px}
+.row-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px 40px;flex-wrap:wrap;padding-bottom:10px;margin-bottom:18px;border-bottom:1px solid var(--line-strong)}
 .row-head .meta{text-align:right}
 .row-head .dock{position:static;width:min(320px,100%);padding:0;background:none;gap:8px}
 .row-head .dock .meta{text-align:left}
@@ -180,6 +188,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .rules{display:flex;flex-direction:column;gap:14px}
 .rule-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .toggle{height:28px;min-width:52px;padding:0 10px;border:1px solid var(--graphite);border-radius:1px;font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
+.toggle:hover{background:var(--hover-bg)}
 .toggle[aria-pressed="true"]{background:var(--blue-light);border-color:var(--blue-dark)}
 .pairs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .pairs li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 0;font-size:13px}
@@ -187,11 +196,11 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .draft .row{grid-column:1 / -1}
 .dock{position:sticky;bottom:calc(20px + env(safe-area-inset-bottom,0px));padding-top:12px;background:var(--bg);display:flex;flex-direction:column;gap:10px}
 .dist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 40px}
-.dist-list{list-style:none;margin:6px 0 0;padding:0}
+.dist-list{list-style:none;margin:6px 0 0;padding:4px 0 0;border-top:1px solid var(--line-strong)}
 .dist-list li{display:grid;grid-template-columns:minmax(0,1fr) 36px 64px;align-items:center;gap:3px 10px;padding:4px 0 3px;font-size:13px}
 .dist-list .k{display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.04em;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dist-list .rn{text-align:left;cursor:text;border-bottom:1px solid transparent;transition:border-color 120ms var(--ease)}
-.dist-list .rn:hover{border-bottom-color:var(--line-strong)}
+.dist-list .rn:hover{border-bottom-color:var(--line-strong);background:var(--hover-bg)}
 .dist-list .rn-input{height:28px;padding:0 6px;font-size:12px;width:100%}
 .dist-list .c{text-align:right;font-size:15px}
 .dist-list .e{text-align:right;color:var(--muted);font-size:11px}
@@ -209,18 +218,18 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .facts dd{margin:0;text-align:right;display:flex;gap:8px;justify-content:flex-end;align-items:center}
 .export-opts{display:flex;flex-direction:column;background:var(--surface)}
 .export-opts button{text-align:left;padding:10px 14px;font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
-.export-opts button:hover{background:var(--blue-pale)}
+.export-opts button:hover{background:var(--hover-bg)}
 .export-opts button[aria-pressed="true"]{background:var(--blue-pale)}
 .export-out{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .export-out textarea{width:100%;height:150px;font-size:11px}
-.board-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding-bottom:0;margin-bottom:18px}
+.board-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding-bottom:10px;margin-bottom:22px;border-bottom:1px solid var(--line-strong)}
 .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:36px 32px}
 .group{display:flex;flex-direction:column;transition:background 180ms var(--ease),box-shadow 180ms var(--ease)}
 .group.drop{background:var(--blue-pale);box-shadow:0 0 0 10px var(--blue-pale),0 0 0 11px var(--black)}
-.g-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:6px}
-.g-num{font-size:26px;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums}
+.g-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid var(--line-strong)}
+.g-num{color:var(--group);font-weight:700;font-size:26px;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums}
 .members{list-style:none;margin:0;padding:0 0 10px;min-height:44px;flex:1}
-.member{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 96px 38px 18px;align-items:center;column-gap:8px;padding:5px 0;cursor:grab;transition:opacity 120ms var(--ease),background 120ms var(--ease)}
+.member{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 34px 44px 18px;align-items:center;column-gap:8px;padding:5px 0;cursor:grab;transition:opacity 120ms var(--ease),background 120ms var(--ease)}
 .member:hover{background:rgba(255,255,255,.45)}
 .member:active{cursor:grabbing}
 .member.dragging{opacity:.65}
@@ -230,13 +239,13 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .m-name{display:flex;gap:6px;align-items:center;min-width:0;font-size:14px;font-weight:var(--w-medium);line-height:1.3;text-transform:uppercase;letter-spacing:.01em}
 .m-name .nm{min-width:0;overflow-wrap:anywhere}
 .m-name .tag{font-size:9px;padding:1px 4px;flex:none}
-.m-disc{display:flex;align-items:center;gap:6px;min-width:0;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-disc{display:flex;align-items:center;gap:6px;min-width:0;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .m-meta{font-size:11px;letter-spacing:.04em;color:var(--text-2);white-space:nowrap;font-variant-numeric:tabular-nums}
 .m-more{width:22px;height:24px;font-size:16px;line-height:1;color:var(--text-2);opacity:0;transition:opacity 120ms var(--ease)}
 .member:hover .m-more,.m-more:focus-visible,.m-more[aria-expanded="true"]{opacity:1}
-.m-more:hover{color:var(--black)}
+.m-more:hover{color:var(--black);background:var(--hover-bg)}
 @media (hover:none){.m-more{opacity:1}}
-.g-stats{margin:0;padding-top:6px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:11px}
+.g-stats{margin:0;padding-top:8px;border-top:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:11px}
 .g-stats dt{letter-spacing:var(--track-caps);color:var(--text-2)}
 .g-stats dd{margin:0;letter-spacing:.04em;font-variant-numeric:tabular-nums;display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px}
 .g-stats .sub{flex-basis:100%;color:var(--muted);font-size:10.5px}
@@ -249,6 +258,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .matrix-wrap{margin-top:40px;padding-top:0;overflow-x:auto}
 .matrix{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13px;margin-top:10px}
 .matrix th,.matrix td{padding:7px 14px 7px 0;text-align:right;white-space:nowrap}
+.matrix thead th{border-bottom:1px solid var(--line-strong)}
 .matrix th{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--text-2)}
 .matrix th:first-child,.matrix td:first-child{text-align:left;padding-right:32px;font-size:11px;letter-spacing:var(--track-caps)}
 .matrix tr.sec td{padding-top:20px;color:var(--text-2);font-weight:var(--w-medium);border-top:0}
@@ -260,7 +270,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 /* menu */
 .menu{position:fixed;z-index:60;background:var(--surface);border:1px solid var(--line-strong);border-radius:2px;width:240px;padding:6px 0;font-size:11px;letter-spacing:var(--track-caps)}
 .menu > button,.menu .sub button{display:flex;justify-content:space-between;width:100%;padding:9px 14px;text-align:left;font-weight:var(--w-medium);transition:background 120ms var(--ease)}
-.menu button:hover{background:var(--blue-pale)}
+.menu button:hover{background:var(--hover-bg)}
 .menu .sub{background:var(--bg);max-height:240px;overflow:auto;margin:4px 0}
 .menu .sub button{font-weight:var(--w-regular);letter-spacing:.02em;font-size:12px;gap:10px}
 .menu .sub .g{color:var(--muted);font-variant-numeric:tabular-nums}
@@ -269,7 +279,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media (max-width:1100px){
-  .wrap{padding-inline:32px}
+  .wrap{padding-inline:24px}
   .page{display:flex;flex-direction:column;gap:48px}
   .work{padding-left:0}
   .dock{position:static}
@@ -279,7 +289,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
   .board{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:640px){
-  .wrap{padding-inline:20px;padding-block:20px 72px}
+  .wrap{padding-inline:16px;padding-block:20px 72px}
   .wordmark{font-size:24px}
   .stages{gap:10px 22px}
   .side{grid-template-columns:minmax(0,1fr);order:2}
@@ -289,6 +299,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
   .actions .stack{grid-column:1 / -1;order:-1}
   .row-head .meta{text-align:left}
   .empty p{font-size:21px}
+  .empty-actions{grid-template-columns:minmax(0,1fr)}
 }
 @media print{
   body{background:#fff}
@@ -315,38 +326,38 @@ const GORDER=['F','M','X'];
 const KEY='group-composer-v5';
 
 const SAMPLE=[
- ['KUA花子','F','JP','VISUAL',''],
- ['张子轩','M','CN','ILLUSTRATION',''],
- ['Kim Younghee','F','KR','MEDIA',''],
- ['瓜生太郎','M','JP','GAME',''],
- ['李梓涵','F','CN','ILLUSTRATION',''],
- ['Hong Gildong','M','KR','MEDIA',''],
- ['陳小美','F','TW','VISUAL','Exchange, spring term'],
- ['瓜生花子','F','JP','ILLUSTRATION',''],
- ['王浩宇','M','CN','VISUAL',''],
- ['KUA桜子','F','JP','VISUAL',''],
- ['KUA太郎','M','JP','MEDIA',''],
- ['瓜生桜子','F','JP','GAME',''],
- ['瓜生次郎','M','JP','ILLUSTRATION',''],
- ['张欣怡','F','CN','MEDIA',''],
- ['KUA和子','F','JP','VISUAL',''],
- ['KUA次郎','M','JP','ILLUSTRATION',''],
- ['Park Younghee','F','KR','GAME',''],
- ['瓜生和子','F','JP','VISUAL',''],
- ['李宇轩','M','CN','GAME',''],
- ['瓜生まこと','X','JP','MEDIA',''],
- ['KUA洋子','F','JP','ILLUSTRATION',''],
- ['瓜生三郎','M','JP','VISUAL',''],
- ['Choi Younghee','F','KR','MEDIA',''],
- ['KUA三郎','M','JP','ILLUSTRATION',''],
- ['王一诺','F','CN','VISUAL',''],
- ['瓜生洋子','F','JP','GAME',''],
- ['Marie Dupont','F','FR','MEDIA','Exchange, spring term'],
- ['瓜生一郎','M','JP','VISUAL',''],
- ['刘皓轩','M','CN','ILLUSTRATION',''],
- ['KUAひかる','','JP','VISUAL','Gender left blank'],
- ['陈雨桐','F','CN','GAME',''],
- ['KUA一郎','M','JP','ILLUSTRATION','']
+ ['KUA花子','F','JP','VD',''],
+ ['张子轩','M','CN','IL',''],
+ ['Kim Younghee','F','KR','EC',''],
+ ['瓜生太郎','M','JP','GC',''],
+ ['李梓涵','F','CN','IL',''],
+ ['Hong Gildong','M','KR','EC',''],
+ ['陳小美','F','TW','VD','Exchange, spring term'],
+ ['瓜生花子','F','JP','IL',''],
+ ['王浩宇','M','CN','VD',''],
+ ['KUA桜子','F','JP','VD',''],
+ ['KUA太郎','M','JP','EC',''],
+ ['瓜生桜子','F','JP','GC',''],
+ ['瓜生次郎','M','JP','IL',''],
+ ['张欣怡','F','CN','EC',''],
+ ['KUA和子','F','JP','VD',''],
+ ['KUA次郎','M','JP','IL',''],
+ ['Park Younghee','F','KR','GC',''],
+ ['瓜生和子','F','JP','VD',''],
+ ['李宇轩','M','CN','GC',''],
+ ['瓜生まこと','X','JP','EC',''],
+ ['KUA洋子','F','JP','IL',''],
+ ['瓜生三郎','M','JP','VD',''],
+ ['Choi Younghee','F','KR','EC',''],
+ ['KUA三郎','M','JP','IL',''],
+ ['王一诺','F','CN','VD',''],
+ ['瓜生洋子','F','JP','GC',''],
+ ['Marie Dupont','F','FR','EC','Exchange, spring term'],
+ ['瓜生一郎','M','JP','VD',''],
+ ['刘皓轩','M','CN','IL',''],
+ ['KUAひかる','','JP','VD','Gender left blank'],
+ ['陈雨桐','F','CN','GC',''],
+ ['KUA一郎','M','JP','IL','']
 ];
 
 let state, past=[], future=[], uid=0;
@@ -456,6 +467,8 @@ function groupIssues(ids,ctx){
 const HK=[['name',/^(name|full ?name|student|student ?name|氏名|名前|姓名|学生名|이름)$/i],['gen',/^(gender|sex|性別|성별)$/i],['nat',/^(nationality|country|nation|citizenship|国籍|국적)$/i],['disc',/^(discipline|major|department|dept|course|program|programme|field|専攻|専門|専門分野|学科|コース|領域|전공)$/i],['notes',/^(notes?|memo|comments?|備考|メモ)$/i]];
 const NAT={japan:'JP','日本':'JP',china:'CN','中国':'CN',korea:'KR','south korea':'KR','韓国':'KR',taiwan:'TW','台湾':'TW',france:'FR','フランス':'FR',usa:'US','united states':'US','アメリカ':'US',germany:'DE','ドイツ':'DE',thailand:'TH','タイ':'TH',indonesia:'ID',vietnam:'VN','ベトナム':'VN','hong kong':'HK','香港':'HK',italy:'IT',uk:'GB','united kingdom':'GB'};
 function normGender(v){const s=String(v||'').trim().toLowerCase();if(!s)return'';if(/^(f|female|woman|w|女|女性|여|여성)$/.test(s))return'F';if(/^(m|male|man|男|男性|남|남성)$/.test(s))return'M';if(/^(x|other|non-?binary|nb|その他|기타)$/.test(s))return'X';return null}
+const DISC={'VISUAL':'VD','VISUAL DESIGN':'VD','ビジュアル':'VD','ビジュアルデザイン':'VD','ILLUST':'IL','ILLUSTRATION':'IL','イラスト':'IL','イラストレーション':'IL','GAME':'GC','GAME CREATION':'GC','GAME DESIGN':'GC','ゲーム':'GC','MEDIA':'EC','メディア':'EC'};
+function normDisc(v){const s=String(v||'').trim().toUpperCase();return DISC[s]||s}
 function normNat(v){const s=String(v||'').trim();if(!s)return'';return NAT[s.toLowerCase()]||s.toUpperCase()}
 function splitLine(line,d){if(d==='\t')return line.split('\t').map(s=>s.trim());const out=[];let c='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(q){if(ch==='"'){if(line[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}else{if(ch==='"')q=true;else if(ch===d){out.push(c);c=''}else c+=ch}}out.push(c);return out.map(s=>s.trim())}
 function parseTable(text){
@@ -479,7 +492,7 @@ function parseTable(text){
   }
   const out=[];let skipped=0;
   rows.forEach(r=>{const s={name:'',gen:'',nat:'',disc:'',notes:'',custom:{}};map.forEach((k,i)=>{const v=(r[i]||'').trim();if(k.startsWith('c:')){if(v)s.custom[k.slice(2)]=v}else s[k]=v});
-    const g=normGender(s.gen);s.gen=g===null?s.gen.toUpperCase().slice(0,10):g;s.nat=normNat(s.nat);s.disc=s.disc.toUpperCase();
+    const g=normGender(s.gen);s.gen=g===null?s.gen.toUpperCase().slice(0,10):g;s.nat=normNat(s.nat);s.disc=normDisc(s.disc);
     if(!s.name){skipped++;return}out.push(s)});
   const colName=i=>String.fromCharCode(65+i);
   const names={name:'NAME',gen:'GENDER',nat:'NATIONALITY',disc:'DISCIPLINE',notes:'NOTES'};
@@ -544,11 +557,13 @@ function renderStudents(){
   const n=state.students.length;
   if(!n&&!ui.pasteOpen&&!ui.adding)return`
     <section class="empty">
-      <div class="stack" style="max-width:260px">
-        <button class="btn full" data-act="paste-open">PASTE STUDENTS</button>
-        <button class="btn full" data-act="csv-open">IMPORT CSV</button>
-        <button class="t-btn" data-act="load-sample" style="align-self:flex-start;margin-top:8px">LOAD SAMPLE CLASS</button>
+      <div class="label">START WITH A CLASS LIST</div>
+      <div class="empty-actions">
+        <button class="btn btn-xl" data-act="paste-open">PASTE STUDENTS LIST</button>
+        <button class="btn btn-xl" data-act="csv-open">IMPORT CSV</button>
       </div>
+      <div class="meta caps">EXCEL · GOOGLE SHEETS · NUMBERS · CSV · TSV</div>
+      <button class="t-btn" data-act="load-sample">LOAD SAMPLE CLASS</button>
     </section>`;
   const dl=discList();
   return`
@@ -579,7 +594,7 @@ function renderTable(){
       <td class="nm">${esc(s.name)}</td>
       <td class="caps">${esc(s.gen)||'<span class="meta">—</span>'}</td>
       <td class="caps">${esc(s.nat)||'<span class="meta">—</span>'}</td>
-      <td class="caps">${s.disc?`<span class="disc-cell"><i class="sw" style="background:${discColor(s.disc)}"></i>${esc(s.disc)}</span>`:`<span class="tip" tabindex="0" data-tip="${T('Discipline is required for composing.','編成には DISCIPLINE の入力が必要です。')}"><span class="dot"></span><span class="meta">MISSING</span></span>`}</td>
+      <td class="caps">${s.disc?`<span class="dc" style="color:${discColor(s.disc)}">${esc(s.disc)}</span>`:`<span class="tip" tabindex="0" data-tip="${T('Discipline is required for composing.','編成には DISCIPLINE の入力が必要です。')}"><span class="dot"></span><span class="meta">MISSING</span></span>`}</td>
       <td class="dim">${esc(s.notes)}</td>
       ${cf.map(c=>`<td class="dim">${esc(s.custom&&s.custom[c])}</td>`).join('')}
       <td class="act"><span class="row-act"><button class="t-btn" data-act="edit" data-id="${s.id}">EDIT</button><button class="t-btn" data-act="remove" data-id="${s.id}">REMOVE</button></span></td>
@@ -603,7 +618,7 @@ function editRow(s,i){
     <td><input class="input" id="e-name" value="${esc(s.name)}" placeholder="Name / 氏名" aria-label="Name"></td>
     <td><select class="input" id="e-gen" aria-label="Gender">${g.map(v=>`<option value="${v}" ${v===s.gen?'selected':''}>${v===''?'— (exclude / 除外)':v==='X'?'X (other / その他)':v}</option>`).join('')}</select></td>
     <td><input class="input caps" id="e-nat" value="${esc(s.nat)}" placeholder="JP / 日本 / …" list="nat-list" aria-label="Nationality" style="width:120px;min-width:120px"></td>
-    <td><input class="input caps" id="e-disc" value="${esc(s.disc)}" placeholder="VISUAL" list="disc-list" aria-label="Discipline"></td>
+    <td><input class="input caps" id="e-disc" value="${esc(s.disc)}" placeholder="VD" list="disc-list" aria-label="Discipline"></td>
     <td><input class="input" id="e-notes" value="${esc(s.notes)}" placeholder="Notes / 備考" aria-label="Notes"></td>
     ${cf.map((c,j)=>`<td><input class="input" id="e-c${j}" value="${esc(s.custom&&s.custom[c])}" aria-label="${esc(c)}"></td>`).join('')}
     <td class="act"><span class="row-act" style="opacity:1"><button class="t-btn strong" data-act="save-edit">SAVE</button><button class="t-btn" data-act="cancel-edit">CANCEL</button></span></td>
@@ -617,7 +632,7 @@ function renderPaste(){
       <p class="prose">Copy the rows from Excel, Google Sheets or Numbers and paste them here. A header row helps; columns such as Name, Gender, Nationality and Discipline (or 氏名, 性別, 国籍, 専攻) are recognised. Other columns are kept as custom fields.</p>
       <p class="prose jp">Excel・Google スプレッドシート・Numbers から行をコピーして貼り付けてください。見出し行があると確実です。Name・GENDER・NATIONALITY・DISCIPLINE（または 氏名・性別・国籍・専攻）を認識します。その他の列はカスタム項目として残ります。</p>
     </div>
-    <textarea class="input" id="paste-ta" rows="10" placeholder="Name&#9;Gender&#9;Nationality&#9;Discipline&#10;瓜生太郎&#9;M&#9;JP&#9;Visual">${esc(ui.pasteText)}</textarea>
+    <textarea class="input" id="paste-ta" rows="10" placeholder="Name&#9;Gender&#9;Nationality&#9;Discipline&#10;瓜生太郎&#9;M&#9;JP&#9;VD">${esc(ui.pasteText)}</textarea>
     <div id="paste-preview">${pastePreview()}</div>
   </div>`;
 }
@@ -657,7 +672,7 @@ function renderComposition(){
     <div>
       <div class="dist-head"><span class="label" style="color:var(--black)">${l}</span><span class="label">N</span><span class="label">/ GROUP</span></div>
       <ul class="dist-list">
-        ${e.map(([cat,v])=>`<li>${k!=='gen'&&ui.renaming&&ui.renaming.k===k&&ui.renaming.cat===cat?`<input class="input caps rn-input" id="rn-input" value="${esc(cat)}" aria-label="Rename ${esc(cat)}">`:`<${k==='gen'?'span':'button'} class="k ${k==='gen'?'':'rn'}" ${k==='gen'?'':`data-act="rename" data-k="${k}" data-cat="${esc(cat)}" title="Rename for every student"`}>${k==='disc'?`<i class="sw" style="background:${discColor(cat)}"></i>`:''}${esc(cat)}</${k==='gen'?'span':'button'}>`}<span class="c num">${v}</span><span class="e num">≈ ${(v/sizes.length).toFixed(1)}</span><span class="bar"><i style="width:${v/max*100}%"></i></span></li>`).join('')}
+        ${e.map(([cat,v])=>`<li>${k!=='gen'&&ui.renaming&&ui.renaming.k===k&&ui.renaming.cat===cat?`<input class="input caps rn-input" id="rn-input" value="${esc(cat)}" aria-label="Rename ${esc(cat)}">`:`<${k==='gen'?'span':'button'} class="k ${k==='gen'?'':'rn'}" ${k==='gen'?'':`data-act="rename" data-k="${k}" data-cat="${esc(cat)}" title="Rename for every student"`}>${k==='disc'?`<span class="dc" style="color:${discColor(cat)}">${esc(cat)}</span>`:esc(cat)}</${k==='gen'?'span':'button'}>`}<span class="c num">${v}</span><span class="e num">≈ ${(v/sizes.length).toFixed(1)}</span><span class="bar"><i style="width:${v/max*100}%"></i></span></li>`).join('')}
         ${blank?`<li><span class="k meta">NOT RECORDED</span><span class="c num meta">${blank}</span><span class="e"></span></li>`:''}
       </ul>
     </div>`}).join('');
@@ -794,14 +809,14 @@ function memberHTML(s,locked){
   const meta=[s.nat,s.gen].filter(Boolean).join(' · ')||'—';
   return`<li class="member" draggable="true" data-id="${s.id}">
     <div class="m-name"><span class="nm" title="${esc(s.name)}">${esc(s.name)}</span>${locked?'<span class="tag" style="color:var(--graphite)">LOCKED</span>':''}</div>
-    <div class="m-disc" title="${esc(s.disc)}">${s.disc?`<i class="sw" style="background:${discColor(s.disc)}"></i>${esc(s.disc)}`:'<span class="dot"></span><span class="meta">—</span>'}</div>
+    <div class="m-disc" title="${esc(s.disc)}">${s.disc?`<span class="dc" style="color:${discColor(s.disc)}">${esc(s.disc)}</span>`:'<span class="dot"></span><span class="meta">—</span>'}</div>
     <div class="m-meta">${esc(meta)}</div>
     <button class="m-more" data-act="menu" data-id="${s.id}" aria-label="Actions for ${esc(s.name)}" aria-haspopup="menu" aria-expanded="${ui.menu&&ui.menu.id===s.id}">⋮</button>
   </li>`;
 }
 function renderMatrix(groups){
   const ctx=buildCtx();
-  const sec=(k,l)=>{const cats=sortEntries(k,counts(k)).map(([c])=>c);return`<tr class="sec"><td colspan="${groups.length+2}">${l}</td></tr>`+cats.map(cat=>{const tot=counts(k)[cat];return`<tr><td>${esc(cat)}</td>${groups.map(g=>{const st=counts(k,g.ids);const v=st[cat]||0;const n=Object.values(st).reduce((a,b)=>a+b,0);const hi=v>=2&&v>Math.ceil(n*(ctx.sh[k][cat]||0)-1e-9);return`<td class="${v?'':'z'} ${hi?'hi':''}">${v}${hi?' <span class="dot"></span>':''}</td>`}).join('')}<td class="tot">${tot}</td></tr>`}).join('')};
+  const sec=(k,l)=>{const cats=sortEntries(k,counts(k)).map(([c])=>c);return`<tr class="sec"><td colspan="${groups.length+2}">${l}</td></tr>`+cats.map(cat=>{const tot=counts(k)[cat];return`<tr><td>${k==='disc'?`<span class="dc" style="color:${discColor(cat)}">${esc(cat)}</span>`:esc(cat)}</td>${groups.map(g=>{const st=counts(k,g.ids);const v=st[cat]||0;const n=Object.values(st).reduce((a,b)=>a+b,0);const hi=v>=2&&v>Math.ceil(n*(ctx.sh[k][cat]||0)-1e-9);return`<td class="${v?'':'z'} ${hi?'hi':''}">${v}${hi?' <span class="dot"></span>':''}</td>`}).join('')}<td class="tot">${tot}</td></tr>`}).join('')};
   return`<div class="matrix-wrap">
     <div class="row" style="justify-content:space-between"><span class="label" style="color:var(--black)">${J('DISTRIBUTION BY GROUP','グループ別の分布')}</span></div>
     <table class="matrix"><thead><tr><th></th>${groups.map((_,i)=>`<th>${gl(i)}</th>`).join('')}<th class="tot">ALL</th></tr></thead>
@@ -849,7 +864,7 @@ function swap(a,b){
 }
 
 /* ---------- events ---------- */
-function readEdit(){const v=id=>{const el=document.getElementById(id);return el?el.value.trim():''};const o={name:v('e-name'),gen:v('e-gen'),nat:v('e-nat').toUpperCase(),disc:v('e-disc').toUpperCase(),notes:v('e-notes'),custom:{}};state.customFields.forEach((c,j)=>{const x=v('e-c'+j);if(x)o.custom[c]=x});return o}
+function readEdit(){const v=id=>{const el=document.getElementById(id);return el?el.value.trim():''};const o={name:v('e-name'),gen:v('e-gen'),nat:v('e-nat').toUpperCase(),disc:normDisc(v('e-disc')),notes:v('e-notes'),custom:{}};state.customFields.forEach((c,j)=>{const x=v('e-c'+j);if(x)o.custom[c]=x});return o}
 function saveEdit(){
   const o=readEdit();
   if(ui.adding){if(!o.name){ui.adding=false;render();return}ui.adding=false;commit(()=>{state.students.push({id:newId(),...o})});return}
