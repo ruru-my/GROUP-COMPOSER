@@ -521,6 +521,7 @@ function emptyState(){state={students:[],customFields:[],settings:{min:4,max:5,g
 try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&saved.state&&saved.state.students){state=saved.state;ui.page=saved.page||'groups'}}catch(e){}
 if(!state){emptyState();ui.page='students'}
 state.current=state.sessions.length-1;
+state.students.forEach(x=>{x.disc=normDisc(x.disc)});
 
 /* ---------- render: shell ---------- */
 function render(){
