@@ -18,19 +18,19 @@
   --bg:#B3FFE0; --surface:#FFFFFF;
   --black:#1E3C4C; --text-2:#3F5D66; --muted:#5F7B77;
   --line:#7FCFB0; --line-strong:#1E3C4C; --silver:#C9CED2; --graphite:#1E3C4C;
-  --hover:rgba(30,60,76,.07);
+  --hover:rgba(30,60,76,.07); --btn-line:rgba(30,60,76,.38);
   --blue:#6CB2FF; --blue-hover:#559FEF; --on-blue:#1E3C4C; --blue-light:#C6E1FF; --blue-pale:#FFFFFF; --blue-dark:#2F7FD8;
-  --group:#2439FF; --hover-bg:#FCDBF4;
+  --group:#2439FF; --hover-bg:#FCDBF4; --hover-ink:#D0308F;
   --orange:#F0561D; --orange-light:#F29D7A;
   --d1:#2F5BFF; --d2:#E2571B; --d3:#7A3FD6; --d4:#D12F7A; --d5:#8A5A00; --d6:#0E6E7A;
   --ease:cubic-bezier(0.2,0.8,0.2,1);
   --font:"Noto Sans JP","Noto Sans Japanese",游ゴシック体,"Yu Gothic",YuGothic,"Hiragino Kaku Gothic Pro","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
   --w-regular:350; --w-medium:500; --w-bold:600;
-  --track:.046em; --track-caps:.1em;
+  --track:.046em; --track-caps:.05em;
 }
 *{box-sizing:border-box}
-:root[data-bg="pink"]{--bg:#FCDBF4;--line:#E3A6D2;--hover-bg:#EFD9FF}
-:root[data-bg="lilac"]{--bg:#EFD9FF;--line:#C9A7EC;--hover-bg:#B3FFE0}
+:root[data-bg="pink"]{--bg:#FCDBF4;--line:#E3A6D2;--hover-bg:#EFD9FF;--hover-ink:#7A3FD6}
+:root[data-bg="lilac"]{--bg:#EFD9FF;--line:#C9A7EC;--hover-bg:#B3FFE0;--hover-ink:#0B8A5B}
 [hidden]{display:none!important}
 body{background:var(--bg);color:var(--black);font-family:var(--font);font-size:14px;line-height:1.5;font-weight:var(--w-regular);letter-spacing:var(--track);font-feature-settings:"palt";-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:0}
@@ -42,13 +42,13 @@ input,select,textarea{font:inherit;color:inherit}
 .num{font-variant-numeric:tabular-nums}
 .confirm{display:flex;flex-direction:column;gap:10px;padding:14px;background:var(--surface)}
 .btn-danger{border-color:var(--orange);color:var(--black);background:var(--orange-light)}
-.btn-danger:hover:not(:disabled){background:var(--orange);color:var(--surface)}
-.ja{margin-left:.75em;font-size:.88em;letter-spacing:.04em;text-transform:none;font-weight:inherit;white-space:nowrap}
+.btn-danger:hover:not(:disabled){background:#EE8A63}
+.ja{margin-left:.75em;font-size:.95em;letter-spacing:.04em;text-transform:none;font-weight:inherit;white-space:nowrap}
 .foot .ja{display:block;margin:4px 0 0;white-space:normal}
 .prose.jp{margin-top:-4px}
-.facts dt .ja,.g-stats dt .ja{display:block;margin-left:0;margin-top:1px;font-size:10px;color:var(--muted)}
+.facts dt .ja,.g-stats dt .ja{display:block;margin-left:0;margin-top:1px;font-size:12px;color:var(--muted)}
 .btn .ja,.btn-primary .ja{margin-left:.9em}
-.foot{padding-block:0 40px;display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font-size:11px;letter-spacing:var(--track-caps);color:var(--text-2)}
+.foot{padding-block:0 40px;display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;font-size:13px;letter-spacing:var(--track-caps);color:var(--text-2)}
 .foot span:first-child{padding-top:0}
 
 /* header */
@@ -57,55 +57,58 @@ input,select,textarea{font:inherit;color:inherit}
 .top-tools{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
 .sessions{display:flex;align-items:center;gap:14px}
 .sessions .label{margin-right:4px}
-.sess{font-size:12px;letter-spacing:var(--track-caps);color:var(--muted);padding:4px 0;border-bottom:1px solid transparent;transition:color 120ms var(--ease)}
-.sess:hover{color:var(--black);background:var(--hover-bg);box-shadow:0 0 0 5px var(--hover-bg)}
+.sess{font-size:13px;letter-spacing:var(--track-caps);color:var(--muted);padding:4px 0;border-bottom:1px solid transparent;transition:color 120ms var(--ease)}
+.sess:hover{color:var(--hover-ink)}
 .sess[aria-current="true"]{color:var(--black);border-bottom-color:var(--black)}
 .history{display:flex;gap:16px}
-.stage-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;margin-top:18px;padding-bottom:10px;border-bottom:1px solid var(--line-strong)}
-.stages{display:flex;gap:12px 44px;flex-wrap:wrap}
-.stage{font-size:12px;letter-spacing:var(--track-caps);color:var(--muted);transition:color 120ms var(--ease)}
-.stage .n{margin-right:10px}
-.stage:hover{color:var(--black);background:var(--hover-bg);box-shadow:0 0 0 5px var(--hover-bg)}
+.stage-row{display:block;margin-top:22px;padding-bottom:10px;border-bottom:1px solid var(--line-strong)}
+.stages{display:flex;justify-content:space-between;gap:8px 24px;flex-wrap:wrap}
+.stage{font-size:20px;font-weight:700;letter-spacing:.02em;line-height:1.3;color:var(--muted);transition:color 120ms var(--ease)}
+.stage .n{margin-right:12px}
+.stage:hover{color:var(--hover-ink)}
 .stage[aria-current="page"]{color:var(--black)}
-.count{font-size:12px;letter-spacing:var(--track-caps);display:flex;gap:14px;align-items:center}
+.count{font-size:13px;letter-spacing:var(--track-caps);display:flex;gap:20px;align-items:center}
+.gpa-vis b{font-weight:var(--w-medium);margin-left:8px;min-width:4.6em;text-align:left}
 
 /* type */
-.label{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--text-2)}
-.h2{font-size:22px;font-weight:700;letter-spacing:.08em;margin:0;line-height:1.2}
-.meta{font-size:11.5px;color:var(--text-2)}
-.prose{font-size:13px;color:var(--text-2);max-width:34em;margin:0}
+.label{font-size:13px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--text-2)}
+.h2{font-size:26px;font-weight:700;letter-spacing:.04em;margin:0;line-height:1.2}
+.meta{font-size:13px;color:var(--text-2)}
+.prose{font-size:14px;color:var(--text-2);max-width:34em;margin:0}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 18px;border:1px solid var(--graphite);border-radius:1px;font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;transition:background 120ms var(--ease);white-space:nowrap}
-.btn:hover:not(:disabled){background:var(--hover-bg)}
-.btn:active:not(:disabled){background:var(--blue-pale)}
-.btn[aria-expanded="true"]{background:var(--black);color:var(--surface);border-color:var(--black)}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 18px;border:1px solid var(--btn-line);border-radius:1px;font-size:13px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;transition:border-color 120ms var(--ease),color 120ms var(--ease),background 120ms var(--ease);white-space:nowrap;color:var(--text-2)}
+.btn:hover:not(:disabled){background:var(--hover-bg);border-color:var(--black);color:var(--black)}
+.btn-xl,.btn[aria-expanded="true"]{color:var(--black)}
+.btn:active:not(:disabled){opacity:.7}
+.btn[aria-expanded="true"],.toggle[aria-pressed="true"]{background:var(--blue-light);border-color:var(--blue-dark);color:var(--black)}
 .btn.full{width:100%}
-.btn-primary{position:relative;overflow:hidden;display:flex;color:var(--on-blue);align-items:center;justify-content:center;width:100%;height:44px;background:var(--blue);border-radius:1px;font-size:12.5px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
-.btn-primary:hover:not(:disabled){background:var(--hover-bg)}
-.btn-primary:active:not(:disabled){background:var(--black)}
+.btn-primary{position:relative;overflow:hidden;display:flex;color:var(--on-blue);align-items:center;justify-content:center;width:100%;height:44px;background:var(--blue);border-radius:1px;font-size:14px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
+.btn-primary:hover:not(:disabled){background:var(--blue-hover)}
+.btn-primary:active:not(:disabled){background:var(--blue-dark)}
 .btn-primary .sweep{position:absolute;left:0;bottom:14px;height:1px;width:38%;background:var(--on-blue);transform:translateX(-100%);opacity:0}
 .btn-primary.busy .sweep{opacity:1;animation:sweep 540ms var(--ease) 1 forwards}
 @keyframes sweep{to{transform:translateX(265%)}}
-.t-btn{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--text-2);padding:4px 0;transition:color 120ms var(--ease)}
-.t-btn:hover:not(:disabled){color:var(--black);background:var(--hover-bg);box-shadow:0 0 0 5px var(--hover-bg)}
+.t-btn{font-size:13px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);text-transform:uppercase;color:var(--text-2);padding:4px 0;transition:color 120ms var(--ease)}
+.t-btn:hover:not(:disabled){color:var(--hover-ink)}
 .t-btn.strong{color:var(--black)}
+.t-btn.strong:hover:not(:disabled){color:var(--hover-ink)}
 .stack{display:flex;flex-direction:column;gap:10px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row{display:flex;gap:10px 16px;flex-wrap:wrap;align-items:center}
 
 /* inputs */
 .input{height:40px;border:1px solid var(--line);background:transparent;border-radius:0;padding:0 10px;min-width:0;transition:border-color 120ms var(--ease)}
 .input:focus{outline:none;border-color:var(--black)}
 select.input{padding-right:6px}
-textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-size:12.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-size:14px;font-family:ui-monospace,Menlo,Consolas,monospace}
 
 /* tags + dots */
-.tag{display:inline-block;font-size:10px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);padding:2px 6px;border:1px solid currentColor;border-radius:1px;line-height:1.3;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);padding:2px 6px;border:1px solid currentColor;border-radius:1px;line-height:1.3;white-space:nowrap}
 .tag.solid{background:var(--graphite);border-color:var(--graphite);color:var(--surface)}
 .tag.sample{color:var(--graphite)}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--orange);vertical-align:1px;flex:none}
 .tip{position:relative;display:inline-flex;align-items:center;gap:6px;cursor:help}
-.tip::after{content:attr(data-tip);white-space:pre-line!important;position:absolute;right:-4px;bottom:calc(100% + 8px);width:max-content;max-width:230px;background:var(--black);color:var(--surface);font-size:11px;line-height:1.45;letter-spacing:var(--track);text-transform:none;font-weight:var(--w-regular);padding:7px 9px;border-radius:1px;opacity:0;pointer-events:none;transition:opacity 120ms var(--ease);z-index:30;text-align:left;white-space:normal}
+.tip::after{content:attr(data-tip);white-space:pre-line!important;position:absolute;right:-4px;bottom:calc(100% + 8px);width:max-content;max-width:230px;background:var(--black);color:var(--surface);font-size:13px;line-height:1.45;letter-spacing:var(--track);text-transform:none;font-weight:var(--w-regular);padding:7px 9px;border-radius:1px;opacity:0;pointer-events:none;transition:opacity 120ms var(--ease);z-index:30;text-align:left;white-space:normal}
 .tip:hover::after,.tip:focus-visible::after{opacity:1}
 .dc{font-weight:700;letter-spacing:.06em}
 .sw{display:inline-block;width:8px;height:8px;border-radius:1px;flex:none;box-shadow:inset 0 0 0 1px rgba(30,60,76,.3)}
@@ -119,11 +122,12 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 /* students table */
 .tbl-wrap{overflow-x:auto}
 .tbl{width:100%;border-collapse:collapse}
-.tbl th{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--text-2);text-align:left;padding:0 16px 8px 0;white-space:nowrap;border-bottom:1px solid var(--line-strong)}
+.tbl th{font-size:13px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--text-2);text-align:left;padding:0 16px 8px 0;white-space:nowrap;border-bottom:1px solid var(--line-strong)}
 .tbl td{padding:6px 16px 6px 0;vertical-align:middle;white-space:nowrap}
 .tbl tbody tr{transition:background 120ms var(--ease)}
-.tbl tbody tr.r:hover{background:var(--surface);cursor:text}
-.tbl td.no{color:var(--muted);font-size:11px;width:40px}
+.tbl tbody tr.r:hover{cursor:text}
+.tbl tbody tr.r:hover td.nm{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.tbl td.no{color:var(--muted);font-size:13px;width:40px}
 .tbl td.nm{font-weight:var(--w-medium);font-size:15px}
 .tbl td.dim{color:var(--text-2)}
 .tbl td.act{text-align:right;width:1%}
@@ -132,42 +136,42 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 @media (hover:none){.row-act{opacity:1}}
 .tbl tr.editing td{padding:8px 8px 8px 0;background:var(--surface)}
 .tbl tr.editing .input{width:100%;min-width:70px}
-.caps{text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+.caps{text-transform:uppercase;letter-spacing:.06em;font-size:13px}
 .disc-cell{display:inline-flex;align-items:center;gap:8px}
 .add-row{padding-top:18px}
 
 /* empty */
 .empty{min-height:calc(100vh - 260px);padding-block:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center}
-.empty-actions{display:grid;grid-template-columns:repeat(2,minmax(0,260px));gap:14px;width:100%;justify-content:center}
-.btn-xl{height:56px;font-size:12.5px;width:100%}
-.empty .meta.caps{font-size:10.5px;letter-spacing:var(--track-caps);color:var(--muted)}
+.empty-actions{display:grid;grid-template-columns:repeat(2,minmax(0,260px));gap:10px;width:100%;justify-content:center}
+.btn-xl{height:56px;font-size:14px;width:100%}
+.empty .meta.caps{font-size:12px;letter-spacing:var(--track-caps);color:var(--muted)}
 .empty p{font-size:26px;line-height:1.35;letter-spacing:.04em;line-height:1.6;margin:0;font-weight:var(--w-regular)}
 
 /* paste */
 .paste{display:flex;flex-direction:column;gap:18px}
-.detect{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:11px;letter-spacing:.06em}
+.detect{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13px;letter-spacing:.06em}
 .detect b{font-weight:var(--w-medium)}
-.preview-tbl td,.preview-tbl th{font-size:12px}
+.preview-tbl td,.preview-tbl th{font-size:13px}
 
 /* composition */
 .stepper{display:flex;align-items:stretch;height:48px;width:max-content}
-.stepper button{width:48px;border:1px solid var(--line);font-size:18px;transition:background 120ms var(--ease)}
-.stepper button:hover:not(:disabled){background:var(--hover-bg)}
-.stepper input{width:76px;border:1px solid var(--line);border-inline:0;background:transparent;text-align:center;font-size:24px;letter-spacing:.04em;border-radius:0;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.stepper button{width:48px;border:1px solid var(--btn-line);color:var(--text-2);font-size:18px;transition:border-color 120ms var(--ease),color 120ms var(--ease),background 120ms var(--ease)}
+.stepper button:hover:not(:disabled){background:var(--hover-bg);border-color:var(--black);color:var(--black)}
+.stepper input{width:76px;border:1px solid var(--btn-line);border-inline:0;background:transparent;text-align:center;font-size:24px;letter-spacing:.04em;border-radius:0;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
 .stepper input::-webkit-inner-spin-button,.stepper input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .stepper input:focus{outline:none;border-color:var(--black);border-inline:1px solid var(--black)}
 .size-line{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .size-line .stepper{height:34px}
 .size-line .stepper button{width:40px}
 .size-line .stepper input{width:60px;font-size:18px}
-.size-sum{font-size:12px;letter-spacing:var(--track-caps);line-height:1.7}
+.size-sum{font-size:13px;letter-spacing:var(--track-caps);line-height:1.7}
 .shape{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:4px}
 .shape span{display:flex;gap:2px}
 .shape i{width:6px;height:6px;background:var(--graphite)}
 .prio{display:flex;flex-direction:column;gap:10px}
-.prio-head{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:var(--track-caps)}
+.prio-head{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;letter-spacing:var(--track-caps)}
 .prio-head b{font-weight:var(--w-medium)}
-.prio-head span{color:var(--text-2);font-size:11px}
+.prio-head span{color:var(--text-2);font-size:13px}
 .steps{position:relative;display:flex;justify-content:space-between;align-items:center;height:22px;margin-top:4px}
 .steps::before{content:"";position:absolute;left:12px;right:12px;top:50%;height:1px;background:var(--line-strong)}
 .steps .fill{position:absolute;left:12px;top:calc(50% - 1px);height:3px;background:var(--blue);width:calc((100% - 24px) * var(--p));transition:width 180ms var(--ease)}
@@ -175,53 +179,57 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .step i{width:11px;height:11px;border-radius:50%;border:1px solid var(--graphite);background:var(--bg);transition:background 120ms var(--ease),border-color 120ms var(--ease)}
 .step.on i{background:var(--blue);border-color:var(--blue-dark)}
 .step.cur i{background:var(--black);border-color:var(--black)}
-.step:hover i{border-color:var(--black);box-shadow:0 0 0 4px var(--hover-bg)}
-.more-toggle{display:flex;justify-content:space-between;width:100%;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps)}
+.step:hover i{border-color:var(--black);box-shadow:0 0 0 1px var(--black)}
+.more-toggle{display:flex;justify-content:space-between;width:100%;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:13px;font-weight:var(--w-medium);letter-spacing:var(--track-caps)}
 .comp{margin-top:28px;display:flex;flex-direction:column;gap:40px}
 .row-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px 40px;flex-wrap:wrap;padding-bottom:10px;margin-bottom:18px;border-bottom:1px solid var(--line-strong)}
 .row-head .meta{text-align:right}
 .row-head .dock{position:static;width:min(320px,100%);padding:0;background:none;gap:8px}
 .row-head .dock .meta{text-align:left}
 .actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 48px;align-items:start;margin-top:28px;padding-top:0}
-.btn-lg{height:44px;font-size:12.5px;letter-spacing:var(--track-caps)}
+.btn-lg{height:44px;font-size:14px;letter-spacing:var(--track-caps)}
 .cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 48px;align-items:start}
 .rules{display:flex;flex-direction:column;gap:14px}
 .rule-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.toggle{height:28px;min-width:52px;padding:0 10px;border:1px solid var(--graphite);border-radius:1px;font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
-.toggle:hover{background:var(--hover-bg)}
-.toggle[aria-pressed="true"]{background:var(--blue-light);border-color:var(--blue-dark)}
+.toggle{height:30px;min-width:56px;padding:0 10px;border:1px solid var(--btn-line);border-radius:1px;font-size:13px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:border-color 120ms var(--ease),color 120ms var(--ease),background 120ms var(--ease);color:var(--text-2)}
+.toggle:hover:not(:disabled){background:var(--hover-bg);border-color:var(--black);color:var(--black)}
+.toggle[aria-pressed="true"]{color:var(--black)}
+.toggle.sm{height:24px;min-width:0;padding:0 8px;font-size:11px}
+.tag.on{background:var(--blue-light);border-color:var(--blue-dark);color:var(--black)}
 .pairs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
-.pairs li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 0;font-size:13px}
+.pairs li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 0;font-size:14px}
 .draft{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .draft .row{grid-column:1 / -1}
 .dock{position:sticky;bottom:calc(20px + env(safe-area-inset-bottom,0px));padding-top:12px;background:var(--bg);display:flex;flex-direction:column;gap:10px}
 .dist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 40px}
-.dist-list{list-style:none;margin:6px 0 0;padding:4px 0 0;border-top:1px solid var(--line-strong)}
-.dist-list li{display:grid;grid-template-columns:minmax(0,1fr) 36px 64px;align-items:center;gap:3px 10px;padding:4px 0 3px;font-size:13px}
-.dist-list .k{display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.04em;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dist-list{list-style:none;margin:6px 0 0;padding:0}
+.dist-list li{display:grid;grid-template-columns:minmax(0,1fr) 40px 76px;align-items:center;gap:3px 10px;padding:4px 0 3px;font-size:14px}
+.dist-list .k{display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.04em;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dist-list .rn{text-align:left;cursor:text;border-bottom:1px solid transparent;transition:border-color 120ms var(--ease)}
-.dist-list .rn:hover{border-bottom-color:var(--line-strong);background:var(--hover-bg)}
-.dist-list .rn-input{height:28px;padding:0 6px;font-size:12px;width:100%}
+.dist-list .rn:hover,.dist-list .rn:hover .dc{color:var(--hover-ink)!important}
+.dist-list .rn-input{height:28px;padding:0 6px;font-size:13px;width:100%}
 .dist-list .c{text-align:right;font-size:15px}
-.dist-list .e{text-align:right;color:var(--muted);font-size:11px}
-.dist-list .bar{grid-column:1 / -1;height:3px;position:relative}
-.dist-list .bar i{position:absolute;left:0;top:0;height:3px;background:var(--graphite)}
-.dist-head{display:grid;grid-template-columns:minmax(0,1fr) 36px 64px;gap:10px;align-items:end}
+.dist-list .e{text-align:right;color:var(--muted);font-size:13px}
+.dist-list .bar{grid-column:1 / -1;height:7px;position:relative;margin-top:2px}
+.dist-list .bar i{position:absolute;left:0;top:0;height:7px;border:1px solid var(--black);background:none;box-sizing:border-box}
+.col-head{color:var(--black);margin-bottom:18px}
+.dist-head .label{color:var(--black)}
+.dist-head{display:grid;grid-template-columns:minmax(0,1fr) 40px 76px;gap:10px;align-items:end}
 .dist-head .label:nth-child(n+2){text-align:right;white-space:nowrap}
-.hist-note{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);display:flex;gap:10px 32px;flex-wrap:wrap;font-size:12px;letter-spacing:.04em}
+.hist-note{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);display:flex;gap:10px 32px;flex-wrap:wrap;font-size:13px;letter-spacing:.04em}
 
 /* groups */
-.board-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:44px;margin-top:28px}
+.board-layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:44px;margin-top:28px}
 .side{position:sticky;top:calc(24px + env(safe-area-inset-top,0px));align-self:start;display:flex;flex-direction:column;gap:20px}
-.facts{display:grid;grid-template-columns:1fr auto;gap:5px 12px;margin:0;font-size:12px}
-.facts dt{white-space:nowrap;letter-spacing:var(--track-caps);color:var(--text-2);font-size:11px;padding-top:1px}
+.facts{display:grid;grid-template-columns:1fr auto;gap:5px 12px;margin:0;font-size:13px}
+.facts dt{white-space:nowrap;letter-spacing:var(--track-caps);color:var(--text-2);font-size:13px;padding-top:1px}
 .facts dd{margin:0;text-align:right;display:flex;gap:8px;justify-content:flex-end;align-items:center}
 .export-opts{display:flex;flex-direction:column;background:var(--surface)}
-.export-opts button{text-align:left;padding:10px 14px;font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
-.export-opts button:hover{background:var(--hover-bg)}
-.export-opts button[aria-pressed="true"]{background:var(--blue-pale)}
+.export-opts button{text-align:left;padding:10px 14px;font-size:13px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);transition:background 120ms var(--ease)}
+.export-opts button:hover{color:var(--hover-ink)}
+.export-opts button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:3px}
 .export-out{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
-.export-out textarea{width:100%;height:150px;font-size:11px}
+.export-out textarea{width:100%;height:150px;font-size:13px}
 .board-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;padding-bottom:10px;margin-bottom:22px;border-bottom:1px solid var(--line-strong)}
 .board{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:36px 32px}
 .group{display:flex;flex-direction:column;transition:background 180ms var(--ease),box-shadow 180ms var(--ease)}
@@ -229,38 +237,39 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .g-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid var(--line-strong)}
 .g-num{color:var(--group);font-weight:700;font-size:26px;letter-spacing:.04em;line-height:1;font-variant-numeric:tabular-nums}
 .members{list-style:none;margin:0;padding:0 0 10px;min-height:44px;flex:1}
-.member{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 34px 44px 18px;align-items:center;column-gap:8px;padding:5px 0;cursor:grab;transition:opacity 120ms var(--ease),background 120ms var(--ease)}
-.member:hover{background:rgba(255,255,255,.45)}
+.member{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 34px 54px 18px;align-items:center;column-gap:8px;padding:5px 0;cursor:grab;transition:opacity 120ms var(--ease),background 120ms var(--ease)}
 .member:active{cursor:grabbing}
 .member.dragging{opacity:.65}
 .member.swap{outline:1px solid var(--blue-dark);outline-offset:-1px;background:var(--surface)}
-.member.swap::after{content:"SWAP?";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--blue-dark);background:var(--surface);padding-left:6px}
+.member.swap::after{content:"SWAP?";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--blue-dark);background:var(--surface);padding-left:6px}
 .member.swap .m-more{visibility:hidden}
-.m-name{display:flex;gap:6px;align-items:center;min-width:0;font-size:14px;font-weight:var(--w-medium);line-height:1.3;text-transform:uppercase;letter-spacing:.01em}
+.m-name{display:flex;gap:6px;align-items:center;min-width:0;font-size:15px;font-weight:var(--w-medium);line-height:1.3;text-transform:uppercase;letter-spacing:.01em}
 .m-name .nm{min-width:0;overflow-wrap:anywhere}
-.m-name .tag{font-size:9px;padding:1px 4px;flex:none}
-.m-disc{display:flex;align-items:center;gap:6px;min-width:0;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.m-meta{font-size:11px;letter-spacing:.04em;color:var(--text-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.m-name .tag{font-size:11px;padding:1px 4px;flex:none}
+.m-disc{display:flex;align-items:center;gap:6px;min-width:0;font-size:14px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.board.gpa-on .member,.gpa-on .member{grid-template-columns:minmax(0,1fr) 34px 132px 18px}
+.m-meta{font-size:13px;letter-spacing:.04em;color:var(--text-2);white-space:nowrap;font-variant-numeric:tabular-nums}
 .m-more{width:22px;height:24px;font-size:16px;line-height:1;color:var(--text-2);opacity:0;transition:opacity 120ms var(--ease)}
 .member:hover .m-more,.m-more:focus-visible,.m-more[aria-expanded="true"]{opacity:1}
-.m-more:hover{color:var(--black);background:var(--hover-bg)}
+.m-more:hover{color:var(--hover-ink)}
 @media (hover:none){.m-more{opacity:1}}
-.g-stats{margin:0;padding-top:8px;border-top:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:11px}
+.g-stats{margin:0;padding-top:8px;border-top:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
 .g-stats dt{letter-spacing:var(--track-caps);color:var(--text-2)}
 .g-stats dd{margin:0;letter-spacing:.04em;font-variant-numeric:tabular-nums;display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px}
-.g-stats .sub{flex-basis:100%;color:var(--muted);font-size:10.5px}
+.g-stats .sub{flex-basis:100%;color:var(--muted);font-size:12px}
 .was{color:var(--muted)}
 .arr{color:var(--muted)}
 .now{color:var(--blue-dark)}
 .tray{margin-bottom:32px;padding:12px 14px;background:rgba(255,255,255,.5)}
 .tray.drop{background:var(--blue-pale)}
+.tray.gpa-on .member{grid-template-columns:minmax(0,1fr) 34px 132px 18px}
 .tray .members{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 32px;min-height:40px;padding-bottom:0}
 .matrix-wrap{margin-top:40px;padding-top:0;overflow-x:auto}
-.matrix{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13px;margin-top:10px}
+.matrix{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px;margin-top:10px}
 .matrix th,.matrix td{padding:7px 14px 7px 0;text-align:right;white-space:nowrap}
 .matrix thead th{border-bottom:1px solid var(--line-strong)}
-.matrix th{font-size:11px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--text-2)}
-.matrix th:first-child,.matrix td:first-child{text-align:left;padding-right:32px;font-size:11px;letter-spacing:var(--track-caps)}
+.matrix th{font-size:13px;font-weight:var(--w-medium);letter-spacing:var(--track-caps);color:var(--text-2)}
+.matrix th:first-child,.matrix td:first-child{text-align:left;padding-right:32px;font-size:13px;letter-spacing:var(--track-caps)}
 .matrix tr.sec td{padding-top:20px;color:var(--text-2);font-weight:var(--w-medium);border-top:0}
 .matrix td.z{color:var(--muted)}
 .matrix td.hi{font-weight:var(--w-bold)}
@@ -268,14 +277,14 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 .page-note{margin-top:64px;display:flex;flex-direction:column;gap:24px;max-width:520px}
 
 /* menu */
-.menu{position:fixed;z-index:60;background:var(--surface);border:1px solid var(--line-strong);border-radius:2px;width:240px;padding:6px 0;font-size:11px;letter-spacing:var(--track-caps)}
+.menu{position:fixed;z-index:60;background:var(--surface);border:1px solid var(--line-strong);border-radius:2px;width:260px;padding:6px 0;font-size:13px;letter-spacing:var(--track-caps)}
 .menu > button,.menu .sub button{display:flex;justify-content:space-between;width:100%;padding:9px 14px;text-align:left;font-weight:var(--w-medium);transition:background 120ms var(--ease)}
-.menu button:hover{background:var(--hover-bg)}
+.menu button:hover{color:var(--hover-ink)}
 .menu .sub{background:var(--bg);max-height:240px;overflow:auto;margin:4px 0}
-.menu .sub button{font-weight:var(--w-regular);letter-spacing:.02em;font-size:12px;gap:10px}
+.menu .sub button{font-weight:var(--w-regular);letter-spacing:.02em;font-size:13px;gap:10px}
 .menu .sub .g{color:var(--muted);font-variant-numeric:tabular-nums}
 .menu .grid{display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px;gap:2px}
-.menu .grid button{justify-content:center;padding:8px 0;font-size:13px;letter-spacing:0;font-variant-numeric:tabular-nums}
+.menu .grid button{justify-content:center;padding:8px 0;font-size:14px;letter-spacing:0;font-variant-numeric:tabular-nums}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media (max-width:1100px){
@@ -291,7 +300,8 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 @media (max-width:640px){
   .wrap{padding-inline:16px;padding-block:20px 72px}
   .wordmark{font-size:24px}
-  .stages{gap:10px 22px}
+  .stages{gap:6px 18px;justify-content:flex-start}
+  .stage{font-size:15px}
   .side{grid-template-columns:minmax(0,1fr);order:2}
   .board{grid-template-columns:minmax(0,1fr)}
   .cols3{grid-template-columns:minmax(0,1fr)}
@@ -313,7 +323,7 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 <body>
 
 <div class="wrap" id="app"></div>
-<footer class="wrap foot"><span>GROUP COMPOSER <button class="t-btn" data-act="clear-all" style="margin-left:16px">CLEAR ALL DATA</button></span><span>Student data stays in this browser. Nothing is uploaded.<span class="ja">学生データはこのブラウザ内にのみ保存され、アップロードされません。</span></span></footer>
+<footer class="wrap foot"><span class="row" style="gap:16px">GROUP COMPOSER <button class="btn" data-act="clear-all">CLEAR ALL DATA</button></span><span>Student data stays in this browser. Nothing is uploaded.<span class="ja">学生データはこのブラウザ内にのみ保存され、アップロードされません。</span></span></footer>
 <div id="menu-layer"></div>
 <input type="file" id="csv-file" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values" hidden>
 
@@ -321,49 +331,55 @@ textarea.input{height:auto;padding:10px;resize:vertical;line-height:1.5;font-siz
 (function(){
 const W=[0,.25,.5,.75,1];
 const WL=['OFF','LOW','MEDIUM','HIGH','HIGHEST'];
-const ATTRS=[['disc','DISCIPLINE'],['nat','NATIONALITY'],['gen','GENDER']];
+const ATTRS=[['disc','DISCIPLINE'],['nat','COUNTRY/REGION'],['gen','GENDER']];
+const PRIO=[...ATTRS,['gpa','GPA BALANCE']];
+const GPA_KEY='group-composer-gpa-visible';
 const GORDER=['F','M','X'];
 const KEY='group-composer-v5';
 
 const SAMPLE=[
- ['KUA花子','F','JP','VD',''],
- ['张子轩','M','CN','IL',''],
- ['Kim Younghee','F','KR','EC',''],
- ['瓜生太郎','M','JP','GC',''],
- ['李梓涵','F','CN','IL',''],
- ['Hong Gildong','M','KR','EC',''],
- ['陳小美','F','TW','VD','Exchange, spring term'],
- ['瓜生花子','F','JP','IL',''],
- ['王浩宇','M','CN','VD',''],
- ['KUA桜子','F','JP','VD',''],
- ['KUA太郎','M','JP','EC',''],
- ['瓜生桜子','F','JP','GC',''],
- ['瓜生次郎','M','JP','IL',''],
- ['张欣怡','F','CN','EC',''],
- ['KUA和子','F','JP','VD',''],
- ['KUA次郎','M','JP','IL',''],
- ['Park Younghee','F','KR','GC',''],
- ['瓜生和子','F','JP','VD',''],
- ['李宇轩','M','CN','GC',''],
- ['瓜生まこと','X','JP','EC',''],
- ['KUA洋子','F','JP','IL',''],
- ['瓜生三郎','M','JP','VD',''],
- ['Choi Younghee','F','KR','EC',''],
- ['KUA三郎','M','JP','IL',''],
- ['王一诺','F','CN','VD',''],
- ['瓜生洋子','F','JP','GC',''],
- ['Marie Dupont','F','FR','EC','Exchange, spring term'],
- ['瓜生一郎','M','JP','VD',''],
- ['刘皓轩','M','CN','IL',''],
- ['KUAひかる','','JP','VD','Gender left blank'],
- ['陈雨桐','F','CN','GC',''],
- ['KUA一郎','M','JP','IL','']
+ ['KUA花子','F','JP','VD','','3.42'],
+ ['张子轩','M','CN','IL','','2.81'],
+ ['Kim Younghee','F','KR','EC','','3.76'],
+ ['瓜生太郎','M','JP','GC','','2.35'],
+ ['李梓涵','F','CN','IL','','3.90'],
+ ['Hong Gildong','M','KR','EC','','2.64'],
+ ['陳小美','F','TW','VD','Exchange, spring term','3.18'],
+ ['瓜生花子','F','JP','IL','','4.00'],
+ ['王浩宇','M','CN','VD','','2.12'],
+ ['KUA桜子','F','JP','VD','','3.55'],
+ ['KUA太郎','M','JP','EC','','2.97'],
+ ['瓜生桜子','F','JP','GC','',''],
+ ['瓜生次郎','M','JP','IL','','3.28'],
+ ['张欣怡','F','CN','EC','','1.82'],
+ ['KUA和子','F','JP','VD','','3.66'],
+ ['KUA次郎','M','JP','IL','','2.48'],
+ ['Park Younghee','F','KR','GC','','3.04'],
+ ['瓜生和子','F','JP','VD','','2.73'],
+ ['李宇轩','M','CN','GC','','3.84'],
+ ['瓜生まこと','X','JP','EC','','2.29'],
+ ['KUA洋子','F','JP','IL','','3.37'],
+ ['瓜生三郎','M','JP','VD','','2.56'],
+ ['Choi Younghee','F','KR','EC','','3.12'],
+ ['KUA三郎','M','JP','IL','','3.71'],
+ ['王一诺','F','CN','VD','','2.90'],
+ ['瓜生洋子','F','JP','GC','','2.41'],
+ ['Marie Dupont','F','FR','EC','Exchange, spring term','3.48'],
+ ['瓜生一郎','M','JP','VD','','2.18'],
+ ['刘皓轩','M','CN','IL','','3.95'],
+ ['KUAひかる','','JP','VD','Gender left blank',''],
+ ['陈雨桐','F','CN','GC','','2.67'],
+ ['KUA一郎','M','JP','IL','','3.22']
 ];
 
 let state, past=[], future=[], uid=0;
-const ui={page:'groups',renaming:null,editId:null,adding:false,pasteOpen:false,pasteText:'',menu:null,menuSub:null,showDist:false,exportOpen:false,exportMode:null,exportStatus:'',moreRules:true,ruleDraft:null,flash:null,composing:false};
+const ui={gpaVisible:false,page:'groups',renaming:null,editId:null,adding:false,pasteOpen:false,pasteText:'',menu:null,menuSub:null,showDist:false,exportOpen:false,exportMode:null,exportStatus:'',moreRules:true,ruleDraft:null,flash:null,composing:false};
 
 /* ---------- utils ---------- */
+const hasG=s=>!!s&&typeof s.gpa==='number'&&isFinite(s.gpa);
+const fmtG=v=>(Math.round(v*100)/100).toFixed(2);
+function parseGPA(v){if(v===null||v===undefined)return null;const t=String(v).trim().replace(/，/g,'.');if(t===''||t==='-'||t==='—')return null;if(!/^\d+(\.\d+)?$/.test(t)&&!/^\.\d+$/.test(t))return null;const n=Number(t);return isFinite(n)?n:null}
+function gpaCell(s){return hasG(s)?(ui.gpaVisible?fmtG(s.gpa):'•••'):'<span class="meta">—</span>'}
 const J=(en,ja)=>`${en}<span class="ja">${ja}</span>`;
 const T=(en,ja)=>en+'\n'+ja;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -399,13 +415,27 @@ function prevPairs(upto){const p=new Map();state.sessions.slice(0,upto).forEach(
 function buildCtx(){
   const m=byId(),sh={},w={};
   ATTRS.forEach(([k])=>{const c=counts(k);const n=Object.values(c).reduce((a,b)=>a+b,0);sh[k]={};for(const x in c)sh[k][x]=c[x]/n;w[k]=W[state.settings.w[k]]});
-  return{m,sh,w,prev:prevPairs(state.current),apart:new Set(state.settings.apart.map(([a,b])=>pk(a,b))),together:state.settings.together,avoid:state.settings.avoidRepeat};
+  w.gpa=W[state.settings.w.gpa||0];
+  const gs=state.students.filter(hasG).sort((a,b)=>b.gpa-a.gpa),gn=gs.length,q={};
+  gs.forEach((x,r)=>{q[x.id]=Math.min(3,Math.floor(r*4/gn))});
+  // students without GPA (e.g. transfer students) are placed in the 25–50% band for spreading only; they never enter the mean
+  if(gn)state.students.forEach(x=>{if(!hasG(x))q[x.id]=1});
+  const qn=Object.keys(q).length,qShare=[0,0,0,0];Object.values(q).forEach(v=>qShare[v]++);for(let i=0;i<4;i++)qShare[i]=qn?qShare[i]/qn:0;
+  const gMean=gn?gs.reduce((a,x)=>a+x.gpa,0)/gn:0,gSd=gn?Math.sqrt(gs.reduce((a,x)=>a+(x.gpa-gMean)**2,0)/gn):0;
+  return{gq:q,gn,qShare,gMean,gSd,m,sh,w,prev:prevPairs(state.current),apart:new Set(state.settings.apart.map(([a,b])=>pk(a,b))),together:state.settings.together,avoid:state.settings.avoidRepeat};
 }
 function gcost(ids,ctx){
   let c=0;
   for(const[k]of ATTRS){const w=ctx.w[k];if(!w)continue;const cnt={};let n=0;for(const id of ids){const v=ctx.m[id]&&ctx.m[id][k];if(v){cnt[v]=(cnt[v]||0)+1;n++}}for(const cat in ctx.sh[k]){const d=(cnt[cat]||0)-n*ctx.sh[k][cat];c+=w*d*d}}
   for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++){const key=pk(ids[i],ids[j]);if(ctx.avoid){const p=ctx.prev.get(key);if(p)c+=1.5*p.length}if(ctx.apart.has(key))c+=60}
   for(const[a,b]of ctx.together){if(ids.includes(a)!==ids.includes(b))c+=30}
+  if(ctx.w.gpa&&ctx.gn>1){
+    // layer 1: spread GPA quartiles (missing GPA counts as 25–50%); layer 2: pull group mean toward class mean (recorded GPA only)
+    const qc=[0,0,0,0];let qn=0,n=0,sum=0;
+    for(const id of ids){const qi=ctx.gq[id];if(qi===undefined)continue;qc[qi]++;qn++;if(hasG(ctx.m[id])){n++;sum+=ctx.m[id].gpa}}
+    if(qn){let qd=0;for(let i=0;i<4;i++){const d=qc[i]-qn*ctx.qShare[i];qd+=d*d}c+=ctx.w.gpa*1.5*qd}
+    if(n&&ctx.gSd>0){const z=(sum/n-ctx.gMean)/ctx.gSd;c+=ctx.w.gpa*z*z}
+  }
   return c;
 }
 function optimize(groups,fixed,frozen,ctx,r){
@@ -453,7 +483,7 @@ function attention(ids,st,ctx){
   const out={};
   ATTRS.forEach(([k])=>{if(!ctx.w[k])return;const n=Object.values(st[k]).reduce((a,b)=>a+b,0);
     for(const[cat,c]of Object.entries(st[k])){const e=n*(ctx.sh[k][cat]||0);if(c>=2&&c>Math.ceil(e-1e-9)){
-      out[k]=k==='disc'?T(`${c} students are from the same discipline (${cat}).`,`同じ DISCIPLINE（${cat}）の学生が${c}名います。`):k==='nat'?T(`${c} of ${n} students list ${cat} as nationality.`,`NATIONALITY が ${cat} の学生が${n}名中${c}名です。`):T(`${c} of ${n} students are recorded as ${cat}.`,`GENDER が ${cat} の学生が${n}名中${c}名です。`);break}}});
+      out[k]=k==='disc'?T(`${c} students are from the same discipline (${cat}).`,`同じ DISCIPLINE（${cat}）の学生が${c}名います。`):k==='nat'?T(`${c} of ${n} students list ${cat} as country/region.`,`COUNTRY/REGION が ${cat} の学生が${n}名中${c}名です。`):T(`${c} of ${n} students are recorded as ${cat}.`,`GENDER が ${cat} の学生が${n}名中${c}名です。`);break}}});
   return out;
 }
 function nameOf(id){const s=byId()[id];return s?s.name:'—'}
@@ -464,7 +494,7 @@ function groupIssues(ids,ctx){
 }
 
 /* ---------- import ---------- */
-const HK=[['name',/^(name|full ?name|student|student ?name|氏名|名前|姓名|学生名|이름)$/i],['gen',/^(gender|sex|性別|성별)$/i],['nat',/^(nationality|country|nation|citizenship|国籍|국적)$/i],['disc',/^(discipline|major|department|dept|course|program|programme|field|専攻|専門|専門分野|学科|コース|領域|전공)$/i],['notes',/^(notes?|memo|comments?|備考|メモ)$/i]];
+const HK=[['name',/^(name|full ?name|student|student ?name|氏名|名前|姓名|学生名|이름)$/i],['gen',/^(gender|sex|性別|성별)$/i],['nat',/^(nationality|country|country\s*\/\s*region|region|nation|citizenship|国籍|国・地域|出身|국적)$/i],['disc',/^(discipline|major|department|dept|course|program|programme|field|専攻|専門|専門分野|学科|コース|領域|전공)$/i],['notes',/^(notes?|memo|comments?|備考|メモ)$/i],['gpa',/^(gpa|g\.p\.a\.?|grade point average|成績|評点)$/i]];
 const NAT={japan:'JP','日本':'JP',china:'CN','中国':'CN',korea:'KR','south korea':'KR','韓国':'KR',taiwan:'TW','台湾':'TW',france:'FR','フランス':'FR',usa:'US','united states':'US','アメリカ':'US',germany:'DE','ドイツ':'DE',thailand:'TH','タイ':'TH',indonesia:'ID',vietnam:'VN','ベトナム':'VN','hong kong':'HK','香港':'HK',italy:'IT',uk:'GB','united kingdom':'GB'};
 function normGender(v){const s=String(v||'').trim().toLowerCase();if(!s)return'';if(/^(f|female|woman|w|女|女性|여|여성)$/.test(s))return'F';if(/^(m|male|man|男|男性|남|남성)$/.test(s))return'M';if(/^(x|other|non-?binary|nb|その他|기타)$/.test(s))return'X';return null}
 const DISC={'VISUAL':'VD','VISUAL DESIGN':'VD','ビジュアル':'VD','ビジュアルデザイン':'VD','ILLUST':'IL','ILLUSTRATION':'IL','イラスト':'IL','イラストレーション':'IL','GAME':'GC','GAME CREATION':'GC','GAME DESIGN':'GC','ゲーム':'GC','MEDIA':'EC','メディア':'EC'};
@@ -486,16 +516,17 @@ function parseTable(text){
     const free=()=>map.map((m,i)=>m?null:i).filter(i=>i!==null);
     let best=-1,bs=.8;free().forEach(i=>{const s=score(i,v=>normGender(v)!==null);if(s>=bs){bs=s;best=i}});if(best>=0)map[best]='gen';
     best=-1;bs=.8;free().forEach(i=>{const s=score(i,v=>/^[A-Za-z]{2,3}$/.test(v)||NAT[v.toLowerCase()]);if(s>=bs){bs=s;best=i}});if(best>=0)map[best]='nat';
+    best=-1;bs=.8;free().forEach(i=>{const v=col(i);const s=score(i,x=>/^\d(\.\d+)?$/.test(x)&&+x<=5);if(s>=bs&&v.some(x=>x.includes('.'))){bs=s;best=i}});if(best>=0)map[best]='gpa';
     const f=free();if(f.length)map[f[0]]='name';
     const f2=free();if(f2.length){let bi=f2[0],br=2;f2.forEach(i=>{const v=col(i);const r=v.length?new Set(v).size/v.length:2;if(r<br){br=r;bi=i}});map[bi]='disc'}
     map.forEach((m,i)=>{if(!m)map[i]='c:FIELD '+(i+1)});
   }
   const out=[];let skipped=0;
-  rows.forEach(r=>{const s={name:'',gen:'',nat:'',disc:'',notes:'',custom:{}};map.forEach((k,i)=>{const v=(r[i]||'').trim();if(k.startsWith('c:')){if(v)s.custom[k.slice(2)]=v}else s[k]=v});
-    const g=normGender(s.gen);s.gen=g===null?s.gen.toUpperCase().slice(0,10):g;s.nat=normNat(s.nat);s.disc=normDisc(s.disc);
+  rows.forEach(r=>{const s={name:'',gen:'',nat:'',disc:'',notes:'',gpa:'',custom:{}};map.forEach((k,i)=>{const v=(r[i]||'').trim();if(k.startsWith('c:')){if(v)s.custom[k.slice(2)]=v}else s[k]=v});
+    const g=normGender(s.gen);s.gen=g===null?s.gen.toUpperCase().slice(0,10):g;s.nat=normNat(s.nat);s.disc=normDisc(s.disc);s.gpa=parseGPA(s.gpa);
     if(!s.name){skipped++;return}out.push(s)});
   const colName=i=>String.fromCharCode(65+i);
-  const names={name:'NAME',gen:'GENDER',nat:'NATIONALITY',disc:'DISCIPLINE',notes:'NOTES'};
+  const names={name:'NAME',gen:'GENDER',nat:'COUNTRY/REGION',disc:'DISCIPLINE',notes:'NOTES',gpa:'GPA'};
   map.forEach((k,i)=>labels.push([colName(i),k.startsWith('c:')?k.slice(2)+' (CUSTOM)':names[k]]));
   return{rows:out,labels,header,skipped,custom:map.filter(k=>k.startsWith('c:')).map(k=>k.slice(2))};
 }
@@ -512,16 +543,19 @@ function applyImport(replace){
 
 /* ---------- initial state ---------- */
 function sampleState(){
-  state={students:SAMPLE.map(([name,gen,nat,disc,notes],i)=>({id:'s'+pad(i+1),name,gen,nat,disc,notes,custom:{}})),customFields:[],
-    settings:{min:4,max:5,groups:null,w:{disc:3,nat:2,gen:2},avoidRepeat:true,apart:[['s02','s09']],together:[]},sessions:[],current:0,sample:true};
+  state={students:SAMPLE.map(([name,gen,nat,disc,notes,gpa],i)=>({id:'s'+pad(i+1),name,gen,nat,disc,notes,gpa:parseGPA(gpa),custom:{}})),customFields:[],
+    settings:{min:4,max:5,groups:null,w:{disc:3,nat:2,gen:2,gpa:2},avoidRepeat:true,apart:[['s02','s09']],together:[]},sessions:[],current:0,sample:true};
   ['W01','W02','W03'].forEach((id,i)=>{state.sessions.push({id,groups:null,lockedStudents:[]});state.current=i;state.sessions[i].groups=composeFresh(101+i*17,i===2?10:4)});
   state.sessions[2].groups[1].locked=true;
 }
-function emptyState(){state={students:[],customFields:[],settings:{min:4,max:5,groups:null,w:{disc:3,nat:2,gen:2},avoidRepeat:true,apart:[],together:[]},sessions:[{id:'W01',groups:null,lockedStudents:[]}],current:0,sample:false}}
+function emptyState(){state={students:[],customFields:[],settings:{min:4,max:5,groups:null,w:{disc:3,nat:2,gen:2,gpa:2},avoidRepeat:true,apart:[],together:[]},sessions:[{id:'W01',groups:null,lockedStudents:[]}],current:0,sample:false}}
 try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&saved.state&&saved.state.students){state=saved.state;ui.page=saved.page||'groups'}}catch(e){}
 if(!state){emptyState();ui.page='students'}
 state.current=state.sessions.length-1;
-state.students.forEach(x=>{x.disc=normDisc(x.disc)});
+state.students.forEach(x=>{x.disc=normDisc(x.disc);x.gpa=parseGPA(x.gpa)});
+if(state.sample&&!state.students.some(hasG))state.students.forEach(x=>{const k=+String(x.id).slice(1)-1;const row=SAMPLE[k];if(row&&row[0]===x.name)x.gpa=parseGPA(row[5])});
+if(state.settings.w.gpa===undefined)state.settings.w.gpa=2;
+try{ui.gpaVisible=localStorage.getItem(GPA_KEY)==='1'}catch(e){}
 
 /* ---------- render: shell ---------- */
 function render(){
@@ -534,17 +568,13 @@ function render(){
     <div class="top-row">
       <h1 class="wordmark">GROUP COMPOSER</h1>
       <div class="top-tools">
-        <div class="history" ${ui.page==='composition'?'hidden':''}>
-          <button class="t-btn" data-act="undo" ${past.length?'':'disabled'} title="Undo (⌘Z)">UNDO</button>
-          <button class="t-btn" data-act="redo" ${future.length?'':'disabled'} title="Redo (⇧⌘Z)">REDO</button>
-        </div>
+        <div class="count num"><button class="toggle gpa-vis" data-act="gpa-vis" aria-pressed="${ui.gpaVisible}" title="Show or hide GPA values everywhere, including exports">GPA <b>${ui.gpaVisible?'VISIBLE':'HIDDEN'}</b></button></div>
       </div>
     </div>
     <div class="stage-row">
       <nav class="stages" aria-label="Stages">
         ${stages.map(([p,no,l])=>`<button class="stage" data-act="page" data-p="${p}" ${ui.page===p?'aria-current="page"':''}><span class="n">${no}</span>${l}</button>`).join('')}
       </nav>
-      <div class="count num"><span>${n} STUDENTS</span></div>
     </div>
   </header>
   <main>${ui.page==='students'?renderStudents():ui.page==='composition'?renderComposition():renderGroups()}</main>`;
@@ -572,17 +602,16 @@ function renderStudents(){
     <aside class="ctrl">
       <div class="block">
         <h2 class="h2">${J('STUDENTS','学生名簿')}</h2>
-        <div class="meta num">${n} STUDENTS · ${dl.length} DISCIPLINES</div>
       </div>
       <div class="stack">
         <button class="btn full" data-act="paste-open" ${ui.pasteOpen?'aria-expanded="true"':''}>PASTE FROM SPREADSHEET</button>
         <button class="btn full" data-act="csv-open">IMPORT CSV</button>
-      </div>
       ${ui.confirmClear?`<div class="confirm">
         <p class="prose" style="color:var(--black)">Delete all ${n} students and every group from this browser? This cannot be undone.</p>
         <p class="prose jp" style="color:var(--black)">このブラウザから学生${n}名とすべてのグループを削除します。元に戻せません。</p>
-        <div class="row"><button class="btn btn-danger" id="clear-confirm" data-act="clear-confirm">DELETE ALL</button><button class="t-btn" data-act="clear-cancel" style="margin-left:8px">CANCEL</button></div>
-      </div>`:`<button class="t-btn" data-act="clear-all" style="align-self:flex-start">CLEAR ALL DATA</button>`}
+        <div class="row"><button class="btn btn-danger" id="clear-confirm" data-act="clear-confirm">DELETE ALL</button><button class="t-btn" data-act="clear-cancel">CANCEL</button></div>
+      </div>`:`<button class="btn full" data-act="clear-all">CLEAR ALL DATA</button>`}
+      </div>
     </aside>
     <section class="work">${ui.pasteOpen?renderPaste():renderTable()}</section>
   </div>`;
@@ -596,6 +625,7 @@ function renderTable(){
       <td class="caps">${esc(s.gen)||'<span class="meta">—</span>'}</td>
       <td class="caps">${esc(s.nat)||'<span class="meta">—</span>'}</td>
       <td class="caps">${s.disc?`<span class="dc" style="color:${discColor(s.disc)}">${esc(s.disc)}</span>`:`<span class="tip" tabindex="0" data-tip="${T('Discipline is required for composing.','編成には DISCIPLINE の入力が必要です。')}"><span class="dot"></span><span class="meta">MISSING</span></span>`}</td>
+      <td class="num gpa-cell">${gpaCell(s)}</td>
       <td class="dim">${esc(s.notes)}</td>
       ${cf.map(c=>`<td class="dim">${esc(s.custom&&s.custom[c])}</td>`).join('')}
       <td class="act"><span class="row-act"><button class="t-btn" data-act="edit" data-id="${s.id}">EDIT</button><button class="t-btn" data-act="remove" data-id="${s.id}">REMOVE</button></span></td>
@@ -603,8 +633,8 @@ function renderTable(){
   return`
   <div class="tbl-wrap">
     <table class="tbl">
-      <thead><tr><th>NO.</th><th>NAME</th><th>GENDER</th><th>NATIONALITY</th><th>DISCIPLINE</th><th>NOTES</th>${cf.map(c=>`<th>${esc(c)}</th>`).join('')}<th></th></tr></thead>
-      <tbody>${rows}${ui.adding?editRow({id:'__new',name:'',gen:'',nat:'',disc:'',notes:'',custom:{}},state.students.length):''}</tbody>
+      <thead><tr><th>NO.</th><th>NAME</th><th>GENDER</th><th>COUNTRY/REGION</th><th>DISCIPLINE</th><th>GPA</th><th>NOTES</th>${cf.map(c=>`<th>${esc(c)}</th>`).join('')}<th></th></tr></thead>
+      <tbody>${rows}${ui.adding?editRow({id:'__new',name:'',gen:'',nat:'',disc:'',notes:'',gpa:null,custom:{}},state.students.length):''}</tbody>
     </table>
   </div>
   <div class="add-row">${ui.adding?'':'<button class="t-btn strong" data-act="add-student">+ ADD STUDENT</button>'}</div>
@@ -618,8 +648,9 @@ function editRow(s,i){
     <td class="no num">${pad(i+1)}</td>
     <td><input class="input" id="e-name" value="${esc(s.name)}" placeholder="Name / 氏名" aria-label="Name"></td>
     <td><select class="input" id="e-gen" aria-label="Gender">${g.map(v=>`<option value="${v}" ${v===s.gen?'selected':''}>${v===''?'— (exclude / 除外)':v==='X'?'X (other / その他)':v}</option>`).join('')}</select></td>
-    <td><input class="input caps" id="e-nat" value="${esc(s.nat)}" placeholder="JP / 日本 / …" list="nat-list" aria-label="Nationality" style="width:120px;min-width:120px"></td>
+    <td><input class="input caps" id="e-nat" value="${esc(s.nat)}" placeholder="JP / 日本 / …" list="nat-list" aria-label="Country/Region" style="width:120px;min-width:120px"></td>
     <td><input class="input caps" id="e-disc" value="${esc(s.disc)}" placeholder="VD" list="disc-list" aria-label="Discipline"></td>
+    <td><input class="input num" id="e-gpa" type="${ui.gpaVisible?'text':'password'}" inputmode="decimal" autocomplete="off" value="${hasG(s)?esc(String(s.gpa)):''}" placeholder="—" aria-label="GPA" style="width:72px;min-width:72px"></td>
     <td><input class="input" id="e-notes" value="${esc(s.notes)}" placeholder="Notes / 備考" aria-label="Notes"></td>
     ${cf.map((c,j)=>`<td><input class="input" id="e-c${j}" value="${esc(s.custom&&s.custom[c])}" aria-label="${esc(c)}"></td>`).join('')}
     <td class="act"><span class="row-act" style="opacity:1"><button class="t-btn strong" data-act="save-edit">SAVE</button><button class="t-btn" data-act="cancel-edit">CANCEL</button></span></td>
@@ -630,22 +661,22 @@ function renderPaste(){
   <div class="paste">
     <div class="block">
       <div class="label">${J('PASTE FROM SPREADSHEET','表から貼り付け')}</div>
-      <p class="prose">Copy the rows from Excel, Google Sheets or Numbers and paste them here. A header row helps; columns such as Name, Gender, Nationality and Discipline (or 氏名, 性別, 国籍, 専攻) are recognised. Other columns are kept as custom fields.</p>
-      <p class="prose jp">Excel・Google スプレッドシート・Numbers から行をコピーして貼り付けてください。見出し行があると確実です。Name・GENDER・NATIONALITY・DISCIPLINE（または 氏名・性別・国籍・専攻）を認識します。その他の列はカスタム項目として残ります。</p>
+      <p class="prose">Paste rows copied from Excel, Google Sheets or Numbers. Include a header row so each column is detected.</p>
+      <p class="prose jp">Excel・Google スプレッドシート・Numbers からコピーした表を貼り付けてください。1行目に見出しがあると、各列を自動で判別します。</p>
     </div>
-    <textarea class="input" id="paste-ta" rows="10" placeholder="Name&#9;Gender&#9;Nationality&#9;Discipline&#10;瓜生太郎&#9;M&#9;JP&#9;VD">${esc(ui.pasteText)}</textarea>
+    <textarea class="input" id="paste-ta" rows="10" placeholder="Name&#9;Gender&#9;Country/Region&#9;Discipline&#9;GPA&#10;瓜生太郎&#9;M&#9;JP&#9;VD&#9;3.42">${esc(ui.pasteText)}</textarea>
     <div id="paste-preview">${pastePreview()}</div>
   </div>`;
 }
 function pastePreview(){
   const p=parseTable(ui.pasteText);
-  const btns=ok=>`<div class="row"><button class="btn" data-act="paste-replace" ${ok?'':'disabled'}>REPLACE LIST</button><button class="btn" data-act="paste-append" ${ok?'':'disabled'}>ADD TO LIST</button><button class="t-btn" data-act="paste-cancel" style="margin-left:8px">CANCEL</button></div>`;
+  const btns=ok=>`<div class="row"><button class="btn" data-act="paste-replace" ${ok?'':'disabled'}>REPLACE LIST</button><button class="btn" data-act="paste-append" ${ok?'':'disabled'}>ADD TO LIST</button><button class="t-btn" data-act="paste-cancel">CANCEL</button></div>`;
   if(!p)return btns(false);
   const miss=p.rows.filter(r=>!r.disc).length;
   return`<div class="stack" style="gap:16px">
     <div class="detect">${p.labels.map(([c,l])=>`<span><span class="meta">${c}</span> → <b>${esc(l)}</b></span>`).join('')}</div>
     <div class="meta num">${p.rows.length} STUDENTS DETECTED${p.header?' · HEADER ROW USED':' · NO HEADER, COLUMNS GUESSED FROM VALUES'}${p.skipped?` · ${p.skipped} ROWS WITHOUT A NAME SKIPPED`:''}${miss?` · <span class="dot"></span> ${miss} WITHOUT DISCIPLINE`:''}</div>
-    ${p.rows.length?`<div class="tbl-wrap"><table class="tbl preview-tbl"><thead><tr><th>NAME</th><th>GENDER</th><th>NATIONALITY</th><th>DISCIPLINE</th></tr></thead><tbody>${p.rows.slice(0,5).map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.gen)||'—'}</td><td>${esc(r.nat)||'—'}</td><td>${esc(r.disc)||'—'}</td></tr>`).join('')}</tbody></table>${p.rows.length>5?`<div class="meta" style="padding-top:8px">+ ${p.rows.length-5} MORE</div>`:''}</div>`:''}
+    ${p.rows.length?`<div class="tbl-wrap"><table class="tbl preview-tbl"><thead><tr><th>NAME</th><th>GENDER</th><th>COUNTRY/REGION</th><th>DISCIPLINE</th><th>GPA</th></tr></thead><tbody>${p.rows.slice(0,5).map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.gen)||'—'}</td><td>${esc(r.nat)||'—'}</td><td>${esc(r.disc)||'—'}</td><td class="num">${gpaCell(r)}</td></tr>`).join('')}</tbody></table>${p.rows.length>5?`<div class="meta" style="padding-top:8px">+ ${p.rows.length-5} MORE</div>`:''}</div>`:''}
     ${btns(p.rows.length>0)}</div>`;
 }
 
@@ -654,7 +685,7 @@ function renderComposition(){
   const n=state.students.length,set=state.settings;
   const sizes=groupSizes(n),st=sizesText(sizes),rg=groupRange(n);
   const se=cur();
-  const prio=ATTRS.map(([k,l])=>{const v=set.w[k];return`
+  const prio=PRIO.map(([k,l])=>{const v=set.w[k]||0;return`
     <div>
       <div class="prio-head"><b>${l}</b><span>${WL[v]}</span></div>
       <div class="steps" role="radiogroup" aria-label="${l} priority" data-k="${k}" style="--p:${v/4}">
@@ -677,6 +708,16 @@ function renderComposition(){
         ${blank?`<li><span class="k meta">NOT RECORDED</span><span class="c num meta">${blank}</span><span class="e"></span></li>`:''}
       </ul>
     </div>`}).join('');
+  const gAll=state.students.filter(hasG);
+  const gpaBlock=`<div>
+      <div class="dist-head"><span class="label" style="color:var(--black)">GPA</span><span></span><span></span></div>
+      <ul class="dist-list">
+        ${ui.gpaVisible&&gAll.length?`<li><span class="k">CLASS AVG.</span><span></span><span class="c num" style="text-align:right">${fmtG(gAll.reduce((a,x)=>a+x.gpa,0)/gAll.length)}</span></li>`:''}
+        <li><span class="k">RECORDED</span><span></span><span class="c num" style="text-align:right">${gAll.length} / ${n}</span></li>
+        ${gAll.length&&gAll.length<n?`<li><span class="k">NO GPA</span><span></span><span class="c num" style="text-align:right;white-space:nowrap">${n-gAll.length} <span class="meta">→ 25–50%</span></span></li>`:''}
+        ${gAll.length?(ui.gpaVisible?`<li><span class="k">RANGE</span><span></span><span class="c num" style="text-align:right;white-space:nowrap">${fmtG(Math.min(...gAll.map(x=>x.gpa)))} — ${fmtG(Math.max(...gAll.map(x=>x.gpa)))}</span></li>`:`<li><span class="k">VALUES</span><span></span><span class="c" style="text-align:right;font-size:12px">HIDDEN</span></li>`):''}
+      </ul>
+    </div>`;
   return`
   <div class="comp">
     <section>
@@ -685,7 +726,7 @@ function renderComposition(){
       </div>
       <div class="cols3">
       <div class="block">
-        <div class="label">${J('GROUP SIZE','人数')}</div>
+        <div class="label col-head">${J('GROUP SIZE','人数')}</div>
         ${[['min','MIN',2,set.max,'最少'],['max','MAX',set.min,12,'最多'],['groups','GROUPS',1,Math.max(1,n),'グループ数']].map(([k,l,lo,hi,ja])=>{const v=k==='groups'?sizes.length:set[k];return`
         <div class="size-line"><span class="label">${l}</span>
         <div class="stepper">
@@ -698,11 +739,11 @@ function renderComposition(){
         <div class="shape" aria-hidden="true">${sizes.map(s=>`<span>${'<i></i>'.repeat(s)}</span>`).join('')}</div>
       </div>
       <div class="block">
-        <div class="label">${J('PRIORITY','優先度')}</div>
+        <div class="label col-head">${J('PRIORITY','優先度')}</div>
         <div class="prio">${prio}</div>
       </div>
       <div class="block">
-        <div class="label">RULES</div>
+        <div class="label col-head">RULES</div>
         <div class="rules">
           <div class="block">
             <div class="rule-head"><span class="label" style="color:var(--black)">AVOID REPEATED PAIRS</span><button class="toggle" data-act="avoid" aria-pressed="${set.avoidRepeat}">${set.avoidRepeat?'ON':'OFF'}</button></div>
@@ -713,9 +754,7 @@ function renderComposition(){
       </div>
       </div>
       <div class="actions">
-        <button class="btn btn-lg" data-act="undo" ${past.length?'':'disabled'} title="Undo (⌘Z)">UNDO</button>
-        <button class="btn btn-lg" data-act="redo" ${future.length?'':'disabled'} title="Redo (⇧⌘Z)">REDO</button>
-        <div class="stack" style="gap:8px">
+        <div class="stack" style="gap:8px;grid-column:1 / -1">
           <button class="btn-primary ${ui.composing?'busy':''}" id="compose-btn" data-act="compose" ${n<2?'disabled':''}><span>${ui.composing?'COMPOSING…':'COMPOSE GROUPS'}</span><span class="sweep"></span></button>
         </div>
       </div>
@@ -724,7 +763,7 @@ function renderComposition(){
       <div class="row-head">
         <h2 class="h2">${J('DISTRIBUTION','分布')}</h2>
       </div>
-      ${n?`<div class="cols3">${dist}</div>`:`<p class="prose">Add students first. <button class="t-btn strong" data-act="page" data-p="students">GO TO STUDENTS</button></p>`}
+      ${n?`<div class="cols3">${dist}${gpaBlock}</div>`:`<p class="prose">Add students first. <button class="t-btn strong" data-act="page" data-p="students">GO TO STUDENTS</button></p>`}
     </section>
   </div>`;
 }
@@ -747,13 +786,14 @@ function renderGroups(){
     <section class="group ${g.locked?'locked':''}" data-g="${gi}" aria-label="Group ${gl(gi)}">
       <header class="g-head">
         <span class="g-num">${gl(gi)}</span>
-        ${g.locked?`<button class="lock-btn" data-act="group-lock" data-g="${gi}" title="Unlock group"><span class="tag solid">LOCKED</span></button>`:`<button class="t-btn lock-btn" data-act="group-lock" data-g="${gi}">LOCK</button>`}
+        <button class="toggle sm lock-btn" data-act="group-lock" data-g="${gi}" aria-pressed="${!!g.locked}" title="${g.locked?'Unlock group':'Lock group'}">${g.locked?'LOCKED':'LOCK'}</button>
       </header>
       <ol class="members">${g.ids.map(id=>memberHTML(m[id],lockedS.has(id))).join('')}</ol>
       <dl class="g-stats">
         <dt>DISCIPLINE</dt><dd>${val('disc')}</dd>
-        <dt>NATIONALITY</dt><dd>${val('nat')}<span class="sub">${natBreak(st)||'—'}</span></dd>
+        <dt>COUNTRY/REGION</dt><dd>${val('nat')}<span class="sub">${natBreak(st)||'—'}</span></dd>
         <dt>GENDER</dt><dd>${val('gen')}</dd>
+        ${ui.gpaVisible?(()=>{const gg=g.ids.map(id=>m[id]).filter(hasG);return`<dt>GPA</dt><dd><span>${gg.length?'AVG. '+fmtG(gg.reduce((a,x)=>a+x.gpa,0)/gg.length):'—'}</span></dd>`})():''}
         ${g.ids.length<state.settings.min||g.ids.length>state.settings.max?`<dt>SIZE</dt><dd><span>${g.ids.length}</span><span class="tip" tabindex="0" data-tip="${T(`${g.ids.length} students. The set range is ${state.settings.min}–${state.settings.max}.`,`${g.ids.length}名。設定範囲は${state.settings.min}–${state.settings.max}名です。`)}"><span class="dot"></span></span></dd>`:''}
         ${iss.rep.length?`<dt>REPEATED</dt><dd><span>${iss.rep.length} ${iss.rep.length===1?'PAIR':'PAIRS'}</span><span class="tip" tabindex="0" data-tip="${esc(iss.rep.join('\n\n'))}"><span class="dot"></span></span></dd>`:''}
         ${iss.apart.length?`<dt>APART</dt><dd><span>NOT MET</span><span class="tip" tabindex="0" data-tip="${esc(iss.apart.join('\n\n'))}"><span class="dot"></span></span></dd>`:''}
@@ -792,24 +832,21 @@ function renderGroups(){
       </dl>
       <div class="block">
         <div class="label">${J('PRIORITY','優先度')}</div>
-        <dl class="facts">${ATTRS.map(([k,l])=>`<dt>${l}</dt><dd>${WL[state.settings.w[k]]}</dd>`).join('')}</dl>
+        <dl class="facts">${PRIO.map(([k,l])=>`<dt>${l}</dt><dd>${WL[state.settings.w[k]||0]}</dd>`).join('')}</dl>
         <button class="t-btn" style="align-self:flex-start" data-act="page" data-p="composition">EDIT COMPOSITION →</button>
       </div>
     </aside>
     <section>
-      <div class="board-head">
-        <span class="label" style="color:var(--black)">${state.students.length} STUDENTS · ${groups.length} GROUPS</span>
-      </div>
-      ${un.length?`<div class="tray" data-g="-1"><div class="row" style="justify-content:space-between"><span class="label" style="color:var(--black)">${J('NOT IN A GROUP','未所属')}</span><span class="tip meta" tabindex="0" data-tip="${T('These students were added after the groups were composed. Drag them into a group or use Shuffle unlocked.','グループ編成後に追加された学生です。グループへドラッグするか、SHUFFLE UNLOCKED を使ってください。')}"><span>${un.length} STUDENTS</span><span class="dot"></span></span></div><ol class="members">${un.map(id=>memberHTML(m[id],false)).join('')}</ol></div>`:''}
-      <div class="board">${cols}</div>
+      ${un.length?`<div class="tray ${ui.gpaVisible?'gpa-on':''}" data-g="-1"><div class="row" style="justify-content:space-between"><span class="label" style="color:var(--black)">${J('NOT IN A GROUP','未所属')}</span><span class="tip meta" tabindex="0" data-tip="${T('These students were added after the groups were composed. Drag them into a group or use Shuffle unlocked.','グループ編成後に追加された学生です。グループへドラッグするか、SHUFFLE UNLOCKED を使ってください。')}"><span>${un.length} STUDENTS</span><span class="dot"></span></span></div><ol class="members">${un.map(id=>memberHTML(m[id],false)).join('')}</ol></div>`:''}
+      <div class="board ${ui.gpaVisible?'gpa-on':''}">${cols}</div>
       ${ui.showDist?renderMatrix(groups):''}
     </section>
   </div>`;
 }
 function memberHTML(s,locked){
-  const meta=[s.nat,s.gen].filter(Boolean).join(' · ')||'—';
+  const meta=[s.nat,s.gen,ui.gpaVisible&&hasG(s)?'GPA '+fmtG(s.gpa):''].filter(Boolean).join(' · ')||'—';
   return`<li class="member" draggable="true" data-id="${s.id}">
-    <div class="m-name"><span class="nm" title="${esc(s.name)}">${esc(s.name)}</span>${locked?'<span class="tag" style="color:var(--graphite)">LOCKED</span>':''}</div>
+    <div class="m-name"><span class="nm" title="${esc(s.name)}">${esc(s.name)}</span>${locked?'<span class="tag on">LOCKED</span>':''}</div>
     <div class="m-disc" title="${esc(s.disc)}">${s.disc?`<span class="dc" style="color:${discColor(s.disc)}">${esc(s.disc)}</span>`:'<span class="dot"></span><span class="meta">—</span>'}</div>
     <div class="m-meta">${esc(meta)}</div>
     <button class="m-more" data-act="menu" data-id="${s.id}" aria-label="Actions for ${esc(s.name)}" aria-haspopup="menu" aria-expanded="${ui.menu&&ui.menu.id===s.id}">⋮</button>
@@ -821,17 +858,17 @@ function renderMatrix(groups){
   return`<div class="matrix-wrap">
     <div class="row" style="justify-content:space-between"><span class="label" style="color:var(--black)">${J('DISTRIBUTION BY GROUP','グループ別の分布')}</span></div>
     <table class="matrix"><thead><tr><th></th>${groups.map((_,i)=>`<th>${gl(i)}</th>`).join('')}<th class="tot">ALL</th></tr></thead>
-    <tbody>${sec('disc','DISCIPLINE')}${sec('nat','NATIONALITY')}${sec('gen','GENDER')}</tbody></table></div>`;
+    <tbody>${sec('disc','DISCIPLINE')}${sec('nat','COUNTRY/REGION')}${sec('gen','GENDER')}${ui.gpaVisible?`<tr class="sec"><td colspan="${groups.length+2}">GPA</td></tr><tr><td>AVG.</td>${groups.map(g=>{const gg=g.ids.map(id=>byId()[id]).filter(hasG);return`<td>${gg.length?fmtG(gg.reduce((a,x)=>a+x.gpa,0)/gg.length):'—'}</td>`}).join('')}<td class="tot">${(()=>{const a=state.students.filter(hasG);return a.length?fmtG(a.reduce((x,y)=>x+y.gpa,0)/a.length):'—'})()}</td></tr>`:''}</tbody></table></div>`;
 }
-function exportText(){const m=byId();const gs=currentGroups()||[];let t=gs.map((g,i)=>`GROUP ${gl(i)}\n`+g.ids.map(id=>m[id].name).join('\n')).join('\n\n');const un=unassigned();if(un.length)t+='\n\nNOT IN A GROUP\n'+un.map(id=>m[id].name).join('\n');return t}
-function exportCSV(){const m=byId();const q=v=>/[",\n]/.test(v)?'"'+String(v).replace(/"/g,'""')+'"':v;const rows=[['group','name','gender','nationality','discipline']];(currentGroups()||[]).forEach((g,i)=>g.ids.forEach(id=>{const s=m[id];rows.push([gl(i),s.name,s.gen,s.nat,s.disc])}));unassigned().forEach(id=>{const s=m[id];rows.push(['',s.name,s.gen,s.nat,s.disc])});return rows.map(r=>r.map(v=>q(v||'')).join(',')).join('\n')}
+function exportText(){const m=byId();const gs=currentGroups()||[];const nm=id=>m[id].name+(ui.gpaVisible&&hasG(m[id])?'  GPA '+fmtG(m[id].gpa):'');let t=gs.map((g,i)=>`GROUP ${gl(i)}\n`+g.ids.map(nm).join('\n')).join('\n\n');const un=unassigned();if(un.length)t+='\n\nNOT IN A GROUP\n'+un.map(nm).join('\n');return t}
+function exportCSV(){const m=byId();const q=v=>/[",\n]/.test(v)?'"'+String(v).replace(/"/g,'""')+'"':v;const gv=ui.gpaVisible,rows=[['group','name','gender','country/region','discipline'].concat(gv?['gpa']:[])];(currentGroups()||[]).forEach((g,i)=>g.ids.forEach(id=>{const s=m[id];rows.push([gl(i),s.name,s.gen,s.nat,s.disc].concat(gv?[hasG(s)?fmtG(s.gpa):'']:[]))}));unassigned().forEach(id=>{const s=m[id];rows.push(['',s.name,s.gen,s.nat,s.disc].concat(gv?[hasG(s)?fmtG(s.gpa):'']:[]))});return rows.map(r=>r.map(v=>q(v||'')).join(',')).join('\n')}
 
 /* ---------- menu ---------- */
 function renderMenu(){
   const layer=document.getElementById('menu-layer');
   if(!ui.menu||ui.page!=='groups'||!currentGroups()){layer.innerHTML='';return}
   const{id,x,y}=ui.menu,se=cur(),gs=currentGroups(),gi=gs.findIndex(g=>g.ids.includes(id)),locked=se.lockedStudents.includes(id),m=byId();
-  const left=Math.max(8,Math.min(x-220,window.innerWidth-228)),top=Math.min(y+6,window.innerHeight-(ui.menuSub?340:130));
+  const left=Math.max(8,Math.min(x-260,window.innerWidth-268)),top=Math.min(y+6,window.innerHeight-(ui.menuSub?340:130));
   let sub='';
   if(ui.menuSub==='move')sub=`<div class="sub"><div class="grid">${gs.map((g,i)=>i===gi?'':`<button data-act="move-to" data-id="${id}" data-g="${i}">${gl(i)}</button>`).join('')}</div></div>`;
   if(ui.menuSub==='swap')sub=`<div class="sub">${gs.map((g,i)=>i===gi?'':g.ids.map(o=>`<button data-act="swap-with" data-id="${id}" data-o="${o}"><span>${esc(m[o].name)}</span><span class="g">${gl(i)}</span></button>`).join('')).join('')}</div>`;
@@ -865,12 +902,12 @@ function swap(a,b){
 }
 
 /* ---------- events ---------- */
-function readEdit(){const v=id=>{const el=document.getElementById(id);return el?el.value.trim():''};const o={name:v('e-name'),gen:v('e-gen'),nat:v('e-nat').toUpperCase(),disc:normDisc(v('e-disc')),notes:v('e-notes'),custom:{}};state.customFields.forEach((c,j)=>{const x=v('e-c'+j);if(x)o.custom[c]=x});return o}
+function readEdit(){const v=id=>{const el=document.getElementById(id);return el?el.value.trim():''};const o={name:v('e-name'),gen:v('e-gen'),nat:v('e-nat').toUpperCase(),disc:normDisc(v('e-disc')),gpa:parseGPA(v('e-gpa')),notes:v('e-notes'),custom:{}};state.customFields.forEach((c,j)=>{const x=v('e-c'+j);if(x)o.custom[c]=x});return o}
 function saveEdit(){
   const o=readEdit();
   if(ui.adding){if(!o.name){ui.adding=false;render();return}ui.adding=false;commit(()=>{state.students.push({id:newId(),...o})});return}
   const id=ui.editId;ui.editId=null;if(!o.name){render();return}
-  const s=byId()[id];if(s&&['name','gen','nat','disc','notes'].every(k=>s[k]===o[k])&&JSON.stringify(s.custom||{})===JSON.stringify(o.custom)){render();return}
+  const s=byId()[id];if(s&&['name','gen','nat','disc','notes'].every(k=>s[k]===o[k])&&(hasG(s)?s.gpa:null)===o.gpa&&JSON.stringify(s.custom||{})===JSON.stringify(o.custom)){render();return}
   commit(()=>{const t=state.students.find(x=>x.id===id);Object.assign(t,o)});
 }
 function saveRename(){const r=ui.renaming;if(!r)return;const el=document.getElementById('rn-input');const v=el?el.value.trim().toUpperCase():'';ui.renaming=null;if(!v||v===r.cat){render();return}commit(()=>{state.students.forEach(s=>{if(s[r.k]===r.cat)s[r.k]=v})})}
@@ -890,6 +927,7 @@ document.addEventListener('click',async e=>{
     case'page':ui.page=d.p;ui.editId=null;ui.adding=false;persist();render();window.scrollTo(0,0);break;
     case'session':state.current=+d.i;persist();render();break;
     case'session-new':commit(()=>{const n=state.sessions.length+1;state.sessions.push({id:'W'+pad(n),groups:null,lockedStudents:[]});state.current=state.sessions.length-1});ui.page='composition';render();break;
+    case'gpa-vis':ui.gpaVisible=!ui.gpaVisible;try{localStorage.setItem(GPA_KEY,ui.gpaVisible?'1':'0')}catch(_){}if(ui.exportMode&&ui.exportMode!=='print')ui.exportStatus='';render();break;
     case'undo':undo();break;
     case'redo':redo();break;
     case'paste-open':ui.page='students';ui.pasteOpen=!ui.pasteOpen||ui.page!=='students';render();{const ta=document.getElementById('paste-ta');if(ta)ta.focus()}break;
@@ -901,7 +939,7 @@ document.addEventListener('click',async e=>{
     case'clear-list':commit(()=>emptyState());break;
     case'clear-all':ui.page='students';ui.pasteOpen=false;ui.editId=null;ui.adding=false;ui.confirmClear=true;render();window.scrollTo(0,0);document.getElementById('clear-confirm')?.focus();break;
     case'clear-cancel':ui.confirmClear=false;render();break;
-    case'clear-confirm':emptyState();past=[];future=[];ui.confirmClear=false;ui.menu=null;ui.exportOpen=false;ui.exportMode=null;ui.page='students';try{localStorage.removeItem(KEY)}catch(_){}persist();render();break;
+    case'clear-confirm':emptyState();ui.gpaVisible=false;try{localStorage.setItem(GPA_KEY,'0')}catch(_){}past=[];future=[];ui.confirmClear=false;ui.menu=null;ui.exportOpen=false;ui.exportMode=null;ui.page='students';try{localStorage.removeItem(KEY)}catch(_){}persist();render();break;
     case'add-student':if(ui.editId)saveEdit();ui.adding=true;render();document.getElementById('e-name')?.focus();break;
     case'edit':if(e.target.closest('tr.editing'))break;if(ui.editId&&ui.editId!==d.id)saveEdit();if(ui.adding)ui.adding=false;ui.editId=d.id;render();{const r=document.getElementById('e-name');if(r)r.focus()}break;
     case'remove':e.stopPropagation();commit(()=>{state.students=state.students.filter(s=>s.id!==d.id);state.settings.apart=state.settings.apart.filter(p=>!p.includes(d.id));state.settings.together=state.settings.together.filter(p=>!p.includes(d.id))});break;
@@ -980,6 +1018,5 @@ document.addEventListener('drop',e=>{
 render();
 })();
 </script>
-
 </body>
 </html>
